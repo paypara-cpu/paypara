@@ -93,8 +93,14 @@
                 opacity: 1;
             }
         }
+        .modal-text {
+            margin-bottom: 20px; /* İlk satır ile ikinci satır arasındaki boşluk */
+        }
+        .modal-text p {
+            margin: 0 0 15px 0; /* Paragraf aralıkları */
+        }
         .modal-close {
-            margin-top: 15px;
+            margin-top: 40px; /* Butonu iki satır aşağı kaydır (20px + 20px boşluk) */
             background-color: #007bff;
             color: white;
             padding: 10px 20px;
@@ -126,13 +132,26 @@
 
     <div id="successModal" class="modal">
         <div class="modal-content">
-            Dekontunuz gönderildi, ödemeniz teyit edildikten sonra panel otomatik olarak açılacaktır. Lütfen sayfayı 2-3 dakika sonra tekrar güncelleyiniz.
+            <div class="modal-text">
+                <p>Dekontunuz gönderildi,</p>
+                <p>ödemeniz teyit edildikten sonra panel otomatik olarak açılacaktır. Lütfen sayfayı 2-3 dakika sonra tekrar güncelleyiniz.</p>
+            </div>
             <button class="modal-close" onclick="closeModal()">Tamam</button>
         </div>
     </div>
 
     <script>
-        // URL parametresini kontrol et
+        // Sayfayı yenilediğinde login ekranına yönlendir
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isAuthenticated = urlParams.get('authenticated') === 'true';
+
+            if (!isAuthenticated) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // URL parametresini kontrol et (ilk yükleme için)
         const urlParams = new URLSearchParams(window.location.search);
         const isAuthenticated = urlParams.get('authenticated') === 'true';
 
