@@ -98,11 +98,22 @@
         </form>
     </div>
     <script>
+        // Kullanıcı adı ve şifre listesi (dinamik olarak genişletebilirsin)
+        const users = {
+            'wesleyoremans': '1234',
+            'Can': '1234',
+            'Lфman': '1234'
+            // Daha fazla kullanıcı ekleyebilirsin: 'kullaniciadi': 'sifre'
+        };
+
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
-            if (username === 'wesleyoremans' && password === '1234') {
+            
+            if (users[username] && users[username] === password) {
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('currentUser', username); // Giriş yapan kullanıcının adını sakla
                 window.location.href = 'Home.html?authenticated=true';
             } else {
                 alert('Kullanıcı adı veya şifre yanlış.');
