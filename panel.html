@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="utf-8">
-    <title>Paypara - Profil</title>
+    <title>Paypara - Panel</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -10,68 +10,151 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: auto;
         }
-        .profil-container {
-            max-width: 600px;
+        .panel-container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 30px;
+            padding: 20px;
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
-        .profil-header {
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
             text-align: center;
-            margin-bottom: 20px;
-            color: #333;
+            position: relative;
         }
-        .profil-header img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
+        .header img {
+            max-width: 150px; /* Görselin maksimum genişliği */
             margin-bottom: 10px;
+            border-radius: 8px;
         }
-        .profil-details {
-            text-align: left;
+        .user-section {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .user-section img {
+            width: 30px; /* Kullanıcı resmi boyutu */
+            height: 30px;
+            border-radius: 50%; /* Yuvarlak resim */
+            margin-right: 10px;
+        }
+        .user-section span {
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            background: none;
+            padding: 0;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1001;
+        }
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .dropdown-content a:hover {
+            background-color: #f0f2f5;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .welcome-section {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-size: 24px;
+        }
+        .account-details {
+            margin: 20px 0;
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 8px;
             border-left: 4px solid #007bff;
         }
-        .profil-details p {
+        .account-details p {
             margin: 10px 0;
             color: #666;
         }
-        .btn {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 25px;
-            border: none;
+        .payment-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e9ecef;
             border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
         }
-        .btn:hover {
-            background-color: #0056b3;
+        .payment-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .payment-section p {
+            color: #666;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="profil-container">
-        <div class="profil-header">
-            <img src="user.png" alt="Kullanıcı Profili" />
-            <h2>Profil Bilgilerim</h2>
+    <div class="panel-container">
+        <div class="header">
+            <img src="https://img.webme.com/pic/l/lumaguide1/logo.png" alt="Paypara Logo" />
+            <h1>Paypara Paneli</h1>
+            <div class="user-section">
+                <img src="user.png" alt="Kullanıcı Profili" />
+                <span id="currentUser"></span>
+                <div class="dropdown">
+                    <button class="dropbtn">...</button>
+                    <div class="dropdown-content">
+                        <a href="profil.html?authenticated=true">Profil</a>
+                        <a href="index.html" onclick="logout()"> <span id="logoutUser"></span> hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="profil-details">
-            <p><strong>Kullanıcı Adı:</strong> <span id="profileUser"></span></p>
-            <p><strong>E-posta:</strong> [E-posta adresi eklenmedi]</p>
-            <p><strong>Kayıt Tarihi:</strong> <span id="registrationDate"></span></p>
+        <div class="welcome-section">
+            <h2>Hoşgeldiniz, <span id="welcomeUser"></span>!</h2>
+            <p>Paypara hesabınıza hoş geldiniz. Hesabınızı yönetin ve ödemelerinizi takip edin.</p>
         </div>
-        <button class="btn" onclick="window.location.href='panel.html?authenticated=true'">Panele Dön</button>
+        <div class="account-details">
+            <h3>Hesap Durumu</h3>
+            <p><strong>Kullanıcı Adı:</strong> <span id="accountUser"></span></p>
+            <p><strong>Bakiye:</strong> 0 TL (Ödeme Teyit Edildikten Sonra Güncellenecek)</p>
+            <p><strong>Son Giriş:</strong> <span id="lastLogin"></span></p>
+        </div>
+        <div class="payment-section">
+            <h3>Ödeme Detayları</h3>
+            <p>Ödemenizi teyit etmek için dekontunuzu yüklediniz. Ödemeniz inceleniyor.</p>
+            <p>Durum: <strong>Beklemede</strong></p>
+            <p>Ödeme tamamlandığında paneliniz aktif hale gelecektir. Lütfen 2-3 dakika sonra sayfayı yenileyin.</p>
+        </div>
     </div>
 
     <script>
@@ -96,15 +179,26 @@
 
         // Kullanıcı bilgilerini localStorage’dan al
         const currentUser = localStorage.getItem('currentUser') || 'Misafir';
-        document.getElementById('profileUser').textContent = currentUser;
+        document.getElementById('currentUser').textContent = currentUser;
+        document.getElementById('welcomeUser').textContent = currentUser;
+        document.getElementById('accountUser').textContent = currentUser;
+        document.getElementById('logoutUser').textContent = currentUser;
 
-        // Kayıt tarihi (simüle)
-        const registrationDate = new Date().toLocaleDateString('tr-TR', { 
+        // Anlık tarih bilgisini ekle
+        const lastLogin = new Date().toLocaleDateString('tr-TR', { 
             day: 'numeric', 
             month: 'long', 
-            year: 'numeric' 
+            year: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
         });
-        document.getElementById('registrationDate').textContent = registrationDate;
+        document.getElementById('lastLogin').textContent = lastLogin;
+
+        // Çıkış yap fonksiyonu
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('currentUser');
+        }
     </script>
 </body>
 </html>
