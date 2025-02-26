@@ -27,41 +27,41 @@
             margin-top: 20px;
             display: none;
         }
-        .gumroad-link {
+        .gumroad-iframe {
             margin-top: 20px;
-            text-align: center;
-        }
-        .gumroad-link a {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 30px;
+            width: 100%;
+            height: 600px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-        .gumroad-link a:hover {
-            background-color: #0056b3;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
     <div id="welcome" class="welcome-message">Paypara’ya Hoş Geldiniz!</div>
     <div id="payment" class="payment-message">Panele erişim için ödemeni tamamla</div>
-    <div class="gumroad-link">
-        <a href="https://paypara.gumroad.com/l/paypara?return_url=https%3A%2F%2Fpaypara-cpu.github.io%2Fpaypara" target="_blank">Ödemeni Tamamla</a>
+    <div class="gumroad-iframe">
+        <iframe src="https://paypara.gumroad.com/l/paypara" width="100%" height="100%" frameborder="0"></iframe>
     </div>
 
     <script>
-        // "Paypara’ya Hoş Geldiniz!" mesajını 1 saniye gösterip kaybolmasını sağla
-        setTimeout(function() {
-            document.getElementById('welcome').style.opacity = '0';
+        // URL parametresini kontrol et
+        const urlParams = new URLSearchParams(window.location.search);
+        const isAuthenticated = urlParams.get('authenticated') === 'true';
+
+        // Eğer doğrulanmamışsa, login ekranına yönlendir
+        if (!isAuthenticated) {
+            window.location.href = 'index.html';
+        } else {
+            // "Paypara’ya Hoş Geldiniz!" mesajını 1 saniye gösterip kaybolmasını sağla
             setTimeout(function() {
-                document.getElementById('welcome').style.display = 'none';
-                document.getElementById('payment').style.display = 'block';
-            }, 500); // Opacity geçişi için 0.5 saniye bekle
-        }, 1000); // 1 saniye sonra kaybol
+                document.getElementById('welcome').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('welcome').style.display = 'none';
+                    document.getElementById('payment').style.display = 'block';
+                }, 500); // Opacity geçişi için 0.5 saniye bekle
+            }, 1000); // 1 saniye sonra kaybol
+        }
     </script>
 </body>
 </html>
