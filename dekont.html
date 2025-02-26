@@ -46,6 +46,17 @@
             box-sizing: border-box;
             margin-bottom: 15px;
         }
+        .dekont-form input.error {
+            border-color: #ff0000;
+            background-color: #ffebee;
+        }
+        .error-message {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
         .dekont-form button {
             background-color: #007bff;
             color: white;
@@ -122,6 +133,7 @@
         <form class="dekont-form" id="dekontForm">
             <label for="nameSurname">İsim Soyisim <span class="required">*</span>:</label>
             <input type="text" id="nameSurname" name="nameSurname" placeholder="Adınızı ve soyadınızı girin" required>
+            <div id="nameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
 
             <label for="dekontFile">Dekont Fotoğrafı veya PDF <span class="required">*</span>:</label>
             <input type="file" id="dekontFile" name="dekontFile" accept="image/*,application/pdf" required>
@@ -133,8 +145,8 @@
     <div id="successModal" class="modal">
         <div class="modal-content">
             <div class="modal-text">
-                <p>Dekontunuz gönderildi,</p>
-                <p>ödemeniz teyit edildikten sonra panel otomatik olarak açılacaktır. Lütfen sayfayı 2-3 dakika sonra tekrar güncelleyiniz.</p>
+                <p>Dekontunuz gönderildi, ödemeniz teyit edildikten sonra panel otomatik olarak açılacaktır.</p> 
+				<p> Lütfen sayfayı 2-3 dakika sonra tekrar güncelleyiniz.</p>
             </div>
             <button class="modal-close" onclick="startRedirect()">Tamam</button>
         </div>
@@ -162,9 +174,22 @@
             // Form gönderildiğinde
             document.getElementById('dekontForm').addEventListener('submit', function(event) {
                 event.preventDefault();
-                const nameSurname = document.getElementById('nameSurname').value;
+                const nameSurname = document.getElementById('nameSurname').value.trim();
                 const dekontFile = document.getElementById('dekontFile').files[0];
-                
+                const nameError = document.getElementById('nameError');
+                const nameInput = document.getElementById('nameSurname');
+
+                // İsim soyisim iki kelime kontrolü
+                const words = nameSurname.split(/\s+/).filter(word => word.length > 0);
+                if (words.length < 2) {
+                    nameInput.classList.add('error');
+                    nameError.style.display = 'block';
+                    return; // Form gönderimini durdur
+                } else {
+                    nameInput.classList.remove('error');
+                    nameError.style.display = 'none';
+                }
+
                 if (nameSurname && dekontFile) {
                     // Sadece PDF ve resim dosyalarını kontrol et (ek güvenlik için)
                     const fileType = dekontFile.type;
@@ -178,6 +203,22 @@
                     alert('Lütfen tüm zorunlu alanları doldurun.');
                 }
             });
+
+            // İsim soyisim input’unda değişiklik olduğunda kontrol et
+            document.getElementById('nameSurname').addEventListener('input', function() {
+                const nameSurname = this.value.trim();
+                const words = nameSurname.split(/\s+/).filter(word => word.length > 0);
+                const nameError = document.getElementById('nameError');
+                const nameInput = this;
+
+                if (words.length < 2) {
+                    nameInput.classList.add('error');
+                    nameError.style.display = 'block';
+                } else {
+                    nameInput.classList.remove('error');
+                    nameError.style.display = 'none';
+                }
+            });
         }
 
         // Modal’ı kapatma ve 5 saniye sonra yönlendirme fonksiyonu
@@ -185,7 +226,7 @@
             document.getElementById('successModal').style.display = 'none';
             setTimeout(function() {
                 window.location.href = 'panel.html?authenticated=true';
-            }, 3000); // 5 saniye (5000 milisaniye) sonra yönlendir
+            }, 5000); // 5 saniye (5000 milisaniye) sonra yönlendir
         }
     </script>
 </body>
