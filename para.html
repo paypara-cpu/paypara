@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Paypara - Para İşlemleri</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon ekleme -->
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -107,6 +108,20 @@
             color: #333;
             margin-bottom: 15px;
         }
+        .dropdown-trigger {
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .dropdown-trigger:hover {
+            background-color: #f0f2f5;
+        }
         .dropdown-menu {
             display: none;
             max-height: 300px; /* Scroll için maksimum yükseklik */
@@ -143,6 +158,7 @@
             border-radius: 8px;
             font-size: 14px;
             flex: 1;
+            min-width: 150px;
         }
         .transaction-form input {
             padding: 10px;
@@ -194,11 +210,20 @@
                 <select id="sendPlatform">
                     <option value="ziraat">Ziraat Bankası</option>
                     <option value="garanti">Garanti BBVA</option>
-                    <option value="isbankasi">İş Bankası</option>
+                    <option value="isbankasi">Türkiye İş Bankası</option>
                     <option value="akbank">Akbank</option>
-                    <option value="yapikredi">Yapı Kredi</option>
+                    <option value="yapikredi">Yapı ve Kredi Bankası</option>
+                    <option value="halkbank">Halkbank</option>
+                    <option value="vakifbank">VakıfBank</option>
+                    <option value="denizbank">DenizBank</option>
+                    <option value="qnb">QNB Finansbank</option>
+                    <option value="ing">ING Bank</option>
+                    <option value="teb">Türk Ekonomi Bankası (TEB)</option>
                     <option value="papara">Papara</option>
                     <option value="payfix">PayFix</option>
+                    <option value="enpara">Enpara.com</option>
+                    <option value="kuveyt">Kuveyt Türk</option>
+                    <option value="ziraatkatilim">Ziraat Katılım</option>
                 </select>
                 <input type="text" id="sendIban" placeholder="IBAN girin" />
                 <button onclick="sendMoney()">Gönder</button>
@@ -212,11 +237,20 @@
                 <select id="receivePlatform">
                     <option value="ziraat">Ziraat Bankası</option>
                     <option value="garanti">Garanti BBVA</option>
-                    <option value="isbankasi">İş Bankası</option>
+                    <option value="isbankasi">Türkiye İş Bankası</option>
                     <option value="akbank">Akbank</option>
-                    <option value="yapikredi">Yapı Kredi</option>
+                    <option value="yapikredi">Yapı ve Kredi Bankası</option>
+                    <option value="halkbank">Halkbank</option>
+                    <option value="vakifbank">VakıfBank</option>
+                    <option value="denizbank">DenizBank</option>
+                    <option value="qnb">QNB Finansbank</option>
+                    <option value="ing">ING Bank</option>
+                    <option value="teb">Türk Ekonomi Bankası (TEB)</option>
                     <option value="papara">Papara</option>
                     <option value="payfix">PayFix</option>
+                    <option value="enpara">Enpara.com</option>
+                    <option value="kuveyt">Kuveyt Türk</option>
+                    <option value="ziraatkatilim">Ziraat Katılım</option>
                 </select>
                 <input type="text" id="receiveIban" placeholder="IBAN girin" />
                 <button onclick="receiveMoney()">Al</button>
@@ -275,8 +309,8 @@
 
         // Rastgele Türk isim-soyisim ve platform listesi için fonksiyonlar
         function generateRandomNames(count) {
-            const firstNames = ['Ahmet', 'Mehmet', 'Fatma', 'Ayşe', 'Ali', 'Zeynep', 'Mustafa', 'Elif', 'Hüseyin', 'Merve'];
-            const lastNames = ['Yılmaz', 'Kaya', 'Demir', 'Çelik', 'Şahin', 'Kılıç', 'Öztürk', 'Aydın', 'Erdoğan', 'Koç'];
+            const firstNames = ['Ahmet', 'Mehmet', 'Fatma', 'Ayşe', 'Ali', 'Zeynep', 'Mustafa', 'Elif', 'Hüseyin', 'Merve', 'Selin', 'Burak', 'Aylin', 'Cem', 'Derya', 'Ebru', 'Fatih', 'Gizem', 'Hakan', 'İrem', 'Jale', 'Kaan', 'Leyla', 'Murat', 'Nazlı', 'Okan', 'Pınar', 'Recep', 'Seda', 'Tuğba', 'Uğur', 'Veli', 'Yağmur', 'Zeki'];
+            const lastNames = ['Yılmaz', 'Kaya', 'Demir', 'Çelik', 'Şahin', 'Kılıç', 'Öztürk', 'Aydın', 'Erdoğan', 'Koç', 'Başar', 'Can', 'Doğan', 'Erdem', 'Güneş', 'Hızlı', 'İnan', 'Karaca', 'Lale', 'Mavi', 'Nalbant', 'Okur', 'Polat', 'Sarıkaya', 'Taş', 'Uçar', 'Vural', 'Yağız', 'Zorlu', 'Atalay', 'Bora', 'Ceylan', 'Duru', 'Efe'];
             const names = new Set(); // Tekrar eden isimleri engellemek için
 
             while (names.size < count) {
@@ -288,7 +322,7 @@
             return Array.from(names);
         }
 
-        // 150 farklı isim-soyisim oluştur
+        // 150 farklı isim-soyisim oluştur (performans için önceden yükle)
         const randomNames = generateRandomNames(150);
 
         // Para Gönder ve Para Al dropdown’larını doldur
@@ -311,9 +345,11 @@
             dropdown.classList.toggle('active');
         }
 
-        // Dropdown’ları doldur
-        populateDropdown('sendDropdown', randomNames);
-        populateDropdown('receiveDropdown', randomNames);
+        // Dropdown’ları doldur (performans için sayfa yüklenirken)
+        window.addEventListener('load', function() {
+            populateDropdown('sendDropdown', randomNames);
+            populateDropdown('receiveDropdown', randomNames);
+        });
 
         // Para Gönder ve Para Al simülasyon fonksiyonları
         function sendMoney() {
