@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Paypara - Ödeme Teyidi</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .dekont-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .dekont-form {
+            text-align: left;
+        }
+        .dekont-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .dekont-form input[type="text"],
+        .dekont-form input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        .dekont-form button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .dekont-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="dekont-container">
+        <h2>Ödeme Teyidi</h2>
+        <p>Lütfen ödemenizi doğrulayın.</p>
+        <form class="dekont-form" id="dekontForm">
+            <label for="dekontNo">Dekont Numarası (İsteğe Bağlı):</label>
+            <input type="text" id="dekontNo" name="dekontNo" placeholder="Dekont numarasını girin">
+
+            <label for="dekontFile">Dekont Fotoğrafı (Zorunlu):</label>
+            <input type="file" id="dekontFile" name="dekontFile" accept="image/*" required>
+
+            <button type="submit">Teyit Gönder</button>
+        </form>
+    </div>
+
+    <script>
+        // URL parametresini kontrol et
+        const urlParams = new URLSearchParams(window.location.search);
+        const isAuthenticated = urlParams.get('authenticated') === 'true';
+
+        // Eğer doğrulanmamışsa, login ekranına yönlendir
+        if (!isAuthenticated) {
+            window.location.href = 'index.html';
+        } else {
+            // Form gönderildiğinde
+            document.getElementById('dekontForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const dekontNo = document.getElementById('dekontNo').value;
+                const dekontFile = document.getElementById('dekontFile').files[0];
+                
+                if (dekontFile) {
+                    alert('Dekont gönderildi! Ödemeniz incelenecek. Lütfen bekleyin.');
+                    // Gerçek bir backend olsaydı, bu veriler bir sunucuya gönderilirdi.
+                    // Şu anda sadece bir simülasyon yapıyoruz.
+                } else {
+                    alert('Lütfen dekont fotoğrafı yükleyin.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

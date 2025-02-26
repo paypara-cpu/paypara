@@ -18,21 +18,49 @@
             font-size: 24px;
             transition: opacity 0.5s ease;
             position: absolute;
-            top: 20px; /* Ekranın üst kısmında sabit, iframe’in üstünde */
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000; /* Iframe’in üstünde kalsın */
+            z-index: 1000;
         }
-        .payment-message {
-            text-align: center;
+        .payment-container {
+            position: absolute;
+            top: 0; /* Sayfanın en üstünde */
+            left: 0;
+            width: 100%;
+            background-color: #ffffff; /* Modern arkaplan rengi */
+            padding: 15px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Güzel gölge */
+            border-radius: 0 0 10px 10px; /* Modern köşeler */
+            z-index: 1000; /* Iframe’in üstünde kalsın */
+            display: flex;
+            justify-content: space-between; /* Yazı ve buton arasında boşluk */
+            align-items: center; /* Dikey hizalama */
+        }
+        .payment-text {
             color: #333;
             font-size: 18px;
-            position: absolute;
-            top: 50px; /* Ekranın üst kısmında, welcome-message’ın altında */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000; /* Iframe’in üstünde kalsın */
-            display: none;
+            font-weight: 600;
+            text-align: left; /* Yazıyı sola hizala */
+            flex-grow: 1; /* Çerçevenin sol tarafını genişlet */
+        }
+        .payment-button {
+            background-color: #007bff; /* Modern mavi buton */
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-left: 20px; /* Buton ile yazı arasında boşluk */
+        }
+        .payment-button:hover {
+            background-color: #0056b3; /* Hover efekti */
+            transform: scale(1.05); /* Hafif büyütme */
+        }
+        .payment-button:active {
+            transform: scale(0.98); /* Tıklandığında hafif küçültme */
         }
         .gumroad-iframe {
             width: 100vw; /* Viewport genişliği */
@@ -41,13 +69,16 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1; /* Mesajların altında kalsın, ama görünür */
+            z-index: 1; /* Çerçevenin altında kalsın */
         }
     </style>
 </head>
 <body>
     <div id="welcome" class="welcome-message">Paypara’ya Hoş Geldiniz!</div>
-    <div id="payment" class="payment-message">Panele erişim için ödemeni tamamla</div>
+    <div class="payment-container">
+        <div class="payment-text">Panele erişim için ödemeni tamamla</div>
+        <button class="payment-button" onclick="window.location.href='dekont.html'">Ödeme yapıldı, dekont gönder!</button>
+    </div>
     <div class="gumroad-iframe">
         <iframe src="https://paypara.gumroad.com/l/paypara" width="100%" height="100%" frameborder="0"></iframe>
     </div>
@@ -66,7 +97,6 @@
                 document.getElementById('welcome').style.opacity = '0';
                 setTimeout(function() {
                     document.getElementById('welcome').style.display = 'none';
-                    document.getElementById('payment').style.display = 'block';
                 }, 500); // Opacity geçişi için 0.5 saniye bekle
             }, 1000); // 1 saniye sonra kaybol
         }
