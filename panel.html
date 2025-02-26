@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Paypara - Panel</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: auto;
+        }
+        .panel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+        .nav-menu {
+            margin: 20px 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .nav-menu a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 600;
+            padding: 10px;
+            transition: color 0.3s ease;
+        }
+        .nav-menu a:hover {
+            color: #0056b3;
+        }
+        .welcome-section {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-size: 24px;
+        }
+        .account-details {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .account-details p {
+            margin: 10px 0;
+            color: #666;
+        }
+        .payment-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+        }
+        .payment-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .payment-section p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel-container">
+        <div class="header">
+            <h1>Paypara Paneli</h1>
+        </div>
+        <div class="nav-menu">
+            <a href="Home.html">Ana Sayfa</a>
+            <a href="dekont.html">Ödeme Teyidi</a>
+            <a href="panel.html">Panel</a>
+        </div>
+        <div class="welcome-section">
+            <h2>Hoş Geldiniz, Wesley Oremans!</h2>
+            <p>Paypara hesabınıza hoş geldiniz. Hesabınızı yönetin ve ödemelerinizi takip edin.</p>
+        </div>
+        <div class="account-details">
+            <h3>Hesap Durumu</h3>
+            <p><strong>Kullanıcı Adı:</strong> wesleyoremans</p>
+            <p><strong>Bakiye:</strong> 0 TL (Ödeme Teyit Edildikten Sonra Güncellenecek)</p>
+            <p><strong>Son Giriş:</strong> [Bugün, 26 Şubat 2025]</p>
+        </div>
+        <div class="payment-section">
+            <h3>Ödeme Detayları</h3>
+            <p>Ödemenizi teyit etmek için dekontunuzu yüklediniz. Ödemeniz inceleniyor.</p>
+            <p>Durum: <strong>Beklemede</strong></p>
+            <p>Ödeme tamamlandığında paneliniz aktif hale gelecektir. Lütfen 2-3 dakika sonra sayfayı yenileyin.</p>
+        </div>
+    </div>
+
+    <script>
+        // URL parametresini kontrol et
+        const urlParams = new URLSearchParams(window.location.search);
+        const isAuthenticated = urlParams.get('authenticated') === 'true';
+
+        // Eğer doğrulanmamışsa, login ekranına yönlendir
+        if (!isAuthenticated) {
+            window.location.href = 'index.html';
+        }
+
+        // Sayfayı yenilediğinde login ekranına yönlendir
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isAuthenticated = urlParams.get('authenticated') === 'true';
+
+            if (!isAuthenticated) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
