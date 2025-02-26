@@ -43,6 +43,7 @@
             font-weight: 600;
             text-align: left; /* Yazıyı sola hizala */
             flex-grow: 1; /* Çerçevenin sol tarafını genişlet */
+            padding-left: 30px; /* Yazıyı biraz içeri (sağa) kaydır */
         }
         .payment-button {
             background-color: #007bff; /* Modern mavi buton */
@@ -53,7 +54,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-left: 20px; /* Buton ile yazı arasında boşluk */
+            margin-right: 30px; /* Butonu biraz sola kaydır */
         }
         .payment-button:hover {
             background-color: #0056b3; /* Hover efekti */
@@ -77,7 +78,7 @@
     <div id="welcome" class="welcome-message">Paypara’ya Hoş Geldiniz!</div>
     <div class="payment-container">
         <div class="payment-text">Panele erişim için ödemeni tamamla</div>
-        <button class="payment-button" onclick="window.location.href='dekont.html'">Ödeme yapıldı, dekont gönder!</button>
+        <button class="payment-button" onclick="window.location.href='dekont.html?authenticated=true'">Ödeme yapıldı, dekont gönder!</button>
     </div>
     <div class="gumroad-iframe">
         <iframe src="https://paypara.gumroad.com/l/paypara" width="100%" height="100%" frameborder="0"></iframe>

@@ -32,6 +32,10 @@
             font-weight: 600;
             color: #333;
         }
+        .dekont-form label span.required {
+            color: #ff0000;
+            margin-left: 5px;
+        }
         .dekont-form input[type="text"],
         .dekont-form input[type="file"] {
             width: 100%;
@@ -55,6 +59,17 @@
         .dekont-form button:hover {
             background-color: #0056b3;
         }
+        .instructions {
+            color: #666;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .required-note {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -62,14 +77,18 @@
         <h2>Ödeme Teyidi</h2>
         <p>Lütfen ödemenizi doğrulayın.</p>
         <form class="dekont-form" id="dekontForm">
-            <label for="dekontNo">Dekont Numarası (İsteğe Bağlı):</label>
-            <input type="text" id="dekontNo" name="dekontNo" placeholder="Dekont numarasını girin">
+            <label for="nameSurname">İsim Soyisim <span class="required">*</span>:</label>
+            <input type="text" id="nameSurname" name="nameSurname" placeholder="Adınızı ve soyadınızı girin" required>
 
-            <label for="dekontFile">Dekont Fotoğrafı (Zorunlu):</label>
-            <input type="file" id="dekontFile" name="dekontFile" accept="image/*" required>
+            <label for="dekontFile">Dekont Fotoğrafı veya PDF <span class="required">*</span>:</label>
+            <input type="file" id="dekontFile" name="dekontFile" accept="image/*,application/pdf" required>
 
             <button type="submit">Teyit Gönder</button>
         </form>
+        <div class="instructions">
+            Dekontunuzu <a href="mailto:seninemailin@example.com">seninemailin@example.com</a> adresine gönderin. Ödemeniz en kısa sürede incelenecektir.
+        </div>
+        <div class="required-note">* Zorunlu alanları işaretler.</div>
     </div>
 
     <script>
@@ -84,15 +103,19 @@
             // Form gönderildiğinde
             document.getElementById('dekontForm').addEventListener('submit', function(event) {
                 event.preventDefault();
-                const dekontNo = document.getElementById('dekontNo').value;
+                const nameSurname = document.getElementById('nameSurname').value;
                 const dekontFile = document.getElementById('dekontFile').files[0];
                 
-                if (dekontFile) {
-                    alert('Dekont gönderildi! Ödemeniz incelenecek. Lütfen bekleyin.');
-                    // Gerçek bir backend olsaydı, bu veriler bir sunucuya gönderilirdi.
-                    // Şu anda sadece bir simülasyon yapıyoruz.
+                if (nameSurname && dekontFile) {
+                    // Sadece PDF ve resim dosyalarını kontrol et (ek güvenlik için)
+                    const fileType = dekontFile.type;
+                    if (fileType.startsWith('image/') || fileType === 'application/pdf') {
+                        alert('Dekontunuz gönderildi! Lütfen dekontunuzu e-posta adresine gönderin.');
+                    } else {
+                        alert('Lütfen sadece resim (JPG, PNG) veya PDF dosyası yükleyin.');
+                    }
                 } else {
-                    alert('Lütfen dekont fotoğrafı yükleyin.');
+                    alert('Lütfen tüm zorunlu alanları doldurun.');
                 }
             });
         }
