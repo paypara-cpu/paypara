@@ -27,18 +27,22 @@
             margin-top: 20px;
             display: none;
         }
-        .gumroad-embed {
+        .gumroad-iframe {
             margin-top: 20px;
-            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
     <div id="welcome" class="welcome-message">Paypara’ya Hoş Geldiniz!</div>
     <div id="payment" class="payment-message">Panele erişim için ödemeni tamamla</div>
-    <div class="gumroad-embed">
-        <script src="https://gumroad.com/js/gumroad.js"></script>
-        <a class="gumroad-product-embed" href="https://paypara.gumroad.com/l/paypara">Paypara</a>
+    <div class="gumroad-iframe">
+        <iframe src="https://paypara.gumroad.com/l/paypara" width="100%" height="100%" frameborder="0"></iframe>
     </div>
 
     <script>
@@ -52,4 +56,4 @@
         }, 1000); // 1 saniye sonra kaybol
     </script>
 </body>
-</html>
+</html>git add Home.html
