@@ -59,16 +59,53 @@
         .dekont-form button:hover {
             background-color: #0056b3;
         }
-        .instructions {
-            color: #666;
-            font-size: 12px;
-            margin-top: 10px;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Arkaplanı yarı saydam siyah */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
-        .required-note {
-            color: #666;
-            font-size: 12px;
-            margin-top: 5px;
+        .modal-content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
             text-align: center;
+            color: #333;
+            font-size: 16px;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-close {
+            margin-top: 15px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .modal-close:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -85,10 +122,13 @@
 
             <button type="submit">Teyit Gönder</button>
         </form>
-        <div class="instructions">
-            Dekontunuzu <a href="mailto:seninemailin@example.com">seninemailin@example.com</a> adresine gönderin. Ödemeniz en kısa sürede incelenecektir.
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            Dekontunuz gönderildi, ödemeniz teyit edildikten sonra panel otomatik olarak açılacaktır. Lütfen sayfayı 2-3 dakika sonra tekrar güncelleyiniz.
+            <button class="modal-close" onclick="closeModal()">Tamam</button>
         </div>
-        <div class="required-note">* Zorunlu alanları işaretler.</div>
     </div>
 
     <script>
@@ -110,7 +150,8 @@
                     // Sadece PDF ve resim dosyalarını kontrol et (ek güvenlik için)
                     const fileType = dekontFile.type;
                     if (fileType.startsWith('image/') || fileType === 'application/pdf') {
-                        alert('Dekontunuz gönderildi! Lütfen dekontunuzu e-posta adresine gönderin.');
+                        // Modal’ı göster
+                        document.getElementById('successModal').style.display = 'flex';
                     } else {
                         alert('Lütfen sadece resim (JPG, PNG) veya PDF dosyası yükleyin.');
                     }
@@ -118,6 +159,11 @@
                     alert('Lütfen tüm zorunlu alanları doldurun.');
                 }
             });
+        }
+
+        // Modal’ı kapatma fonksiyonu
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
         }
     </script>
 </body>
