@@ -133,9 +133,10 @@
     <div id="successModal" class="modal">
         <div class="modal-content">
             <div class="modal-text">
-                <p></><p>Dekontunuz gönderildi, ödemeniz teyit edildikten sonra panel otomatik olarak açılacaktır.</p> <p>Lütfen sayfayı 2-3 dakika sonra tekrar güncelleyiniz.</p>
+                <p>Dekontunuz gönderildi,</p>
+                <p>ödemeniz teyit edildikten sonra panel otomatik olarak açılacaktır. Lütfen sayfayı 2-3 dakika sonra tekrar güncelleyiniz.</p>
             </div>
-            <button class="modal-close" onclick="closeModal()">Tamam</button>
+            <button class="modal-close" onclick="startRedirect()">Tamam</button>
         </div>
     </div>
 
@@ -179,9 +180,12 @@
             });
         }
 
-        // Modal’ı kapatma fonksiyonu
-        function closeModal() {
+        // Modal’ı kapatma ve 5 saniye sonra yönlendirme fonksiyonu
+        function startRedirect() {
             document.getElementById('successModal').style.display = 'none';
+            setTimeout(function() {
+                window.location.href = 'panel.html?authenticated=true';
+            }, 3000); // 5 saniye (5000 milisaniye) sonra yönlendir
         }
     </script>
 </body>
