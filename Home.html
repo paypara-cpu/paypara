@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
+            background-color: #ffffff;
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -16,21 +16,16 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
         }
         .header {
             background-color: #ffffff;
             padding: 15px 0;
-            border-radius: 12px 12px 0 0;
             text-align: center;
             overflow: hidden;
         }
         .header img {
             width: 100%;
-            max-width: 1200px;
+            max-width: 300px; /* Gumroad’a uygun logo boyutu */
             height: auto;
             object-fit: contain;
         }
@@ -91,16 +86,7 @@
             display: block;
         }
         .welcome-message {
-            text-align: center;
-            color: #333;
-            font-size: 24px;
-            margin: 20px 0;
-            transition: opacity 0.5s ease;
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
+            display: none; /* Hoş geldiniz mesajını kaldırdık, Gumroad’a uygun */
         }
         .payment-options {
             display: grid;
@@ -167,6 +153,23 @@
         .pink-payment-button:active {
             background-color: #ff00a1; /* Tıklanmış hali (Gumroad’a benzer) */
         }
+        .additional-buttons {
+            margin-top: 15px;
+            text-align: left;
+        }
+        .additional-buttons button {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .additional-buttons button:hover {
+            background-color: #e9ecef;
+        }
         .checkout-iframe {
             display: none;
             width: 100%;
@@ -206,6 +209,9 @@
                 <div class="price">$100</div>
                 <div class="discount">2 hafta (46% indirimli)</div>
                 <button class="payment-button" onclick="showCheckout('https://gumroad.com/checkout?product=pgwuzp&option=7DAX6AFwDY-kMYP8iRrIJw%3D%3D&quantity=1&referrer=https%3A%2F%2Fpaypara-cpu.github.io%2F')">Pay</button>
+                <div class="additional-buttons">
+                    <button>Uluslararası banka transferleri, kripto para transferleri ve 55 farklı platforma 7/24 ücretsiz, anında para transferleri sunar. Gelişmiş güvenlik protokolleri ile kullanıcı dostu bir deneyim sağlar.</button>
+                </div>
             </div>
             <div class="payment-option">
                 <h3>Paypara Panel</h3>
@@ -213,6 +219,9 @@
                 <div class="price">$200</div>
                 <div class="discount">1 ay (16% indirimli)</div>
                 <button class="payment-button pink-payment-button" onclick="showCheckout('https://gumroad.com/checkout?product=pgwuzp&option=JH7pJ6LYPIPCe0_3AB409w%3D%3D&quantity=1&referrer=https%3A%2F%2Fpaypara-cpu.github.io%2F')">Pay</button>
+                <div class="additional-buttons">
+                    <button>Uluslararası banka transferleri, kripto para transferleri ve 55 farklı platforma 7/24 ücretsiz, anında para transferleri sunar. Gelişmiş güvenlik protokolleri ile kullanıcı dostu bir deneyim sağlar.</button>
+                </div>
             </div>
             <div class="payment-option">
                 <h3>Paypara Panel</h3>
@@ -220,6 +229,9 @@
                 <div class="price">$1,000</div>
                 <div class="discount">Yıllık (62% indirimli)</div>
                 <button class="payment-button pink-payment-button" onclick="showCheckout('https://gumroad.com/checkout?product=pgwuzp&option=FlZXdA2_pCOcYh2c3WbsRA%3D%3D&quantity=1&referrer=https%3A%2F%2Fpaypara-cpu.github.io%2F')">Pay</button>
+                <div class="additional-buttons">
+                    <button>Uluslararası banka transferleri, kripto para transferleri ve 55 farklı platforma 7/24 ücretsiz, anında para transferleri sunar. Gelişmiş güvenlik protokolleri ile kullanıcı dostu bir deneyim sağlar.</button>
+                </div>
             </div>
         </div>
     </div>
@@ -234,13 +246,7 @@
         if (!isAuthenticated) {
             window.location.href = 'index.html';
         } else {
-            // "Paypara’ya Hoş Geldiniz!" mesajını 1 saniye gösterip kaybolmasını sağla
-            setTimeout(function() {
-                document.getElementById('welcome').style.opacity = '0';
-                setTimeout(function() {
-                    document.getElementById('welcome').style.display = 'none';
-                }, 500); // Opacity geçişi için 0.5 saniye bekle
-            }, 1000); // 1 saniye sonra kaybol
+            // "Paypara’ya Hoş Geldiniz!" mesajını kaldırdık, Gumroad’a uygun
         }
 
         // Kullanıcı bilgilerini localStorage’dan al
@@ -273,32 +279,36 @@
             }
         });
 
-        // Checkout iframe’ini göster
+        // Checkout iframe’ini göster (iframe çalışmazsa link yönlendirmesi)
         function showCheckout(url) {
             const iframe = document.getElementById('checkoutIframe');
-            iframe.src = url;
-            iframe.classList.add('active');
+            try {
+                iframe.src = url;
+                iframe.classList.add('active');
 
-            // İframe’i kapatma (örneğin iframe içindeki bir butonla veya dışarı tıklandığında)
-            iframe.addEventListener('load', function() {
-                // Eğer iframe içeriği kontrol edilemiyorsa, manuel bir kapatma butonu ekleyebiliriz
-                const closeButton = document.createElement('button');
-                closeButton.textContent = 'Kapat';
-                closeButton.style.position = 'absolute';
-                closeButton.style.top = '10px';
-                closeButton.style.right = '10px';
-                closeButton.style.backgroundColor = '#007bff';
-                closeButton.style.color = 'white';
-                closeButton.style.padding = '8px 16px';
-                closeButton.style.border = 'none';
-                closeButton.style.borderRadius = '8px';
-                closeButton.style.cursor = 'pointer';
-                closeButton.addEventListener('click', function() {
-                    iframe.classList.remove('active');
-                    iframe.src = ''; // İframe’i temizle
-                });
-                iframe.contentWindow.document.body.appendChild(closeButton);
-            }, { once: true });
+                // İframe yüklendiğinde kapatma butonu ekle
+                iframe.addEventListener('load', function() {
+                    const closeButton = document.createElement('button');
+                    closeButton.textContent = 'Kapat';
+                    closeButton.style.position = 'absolute';
+                    closeButton.style.top = '10px';
+                    closeButton.style.right = '10px';
+                    closeButton.style.backgroundColor = '#007bff';
+                    closeButton.style.color = 'white';
+                    closeButton.style.padding = '8px 16px';
+                    closeButton.style.border = 'none';
+                    closeButton.style.borderRadius = '8px';
+                    closeButton.style.cursor = 'pointer';
+                    closeButton.addEventListener('click', function() {
+                        iframe.classList.remove('active');
+                        iframe.src = ''; // İframe’i temizle
+                    });
+                    iframe.contentWindow.document.body.appendChild(closeButton);
+                }, { once: true });
+            } catch (error) {
+                // Eğer iframe engellenirse, link yönlendirmesi yap
+                window.location.href = url;
+            }
         }
     </script>
 </body>
