@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Paypara - Para İşlemleri</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon ekleme -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .panel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sticky-menu {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-left {
+            display: flex;
+            align-items: center;
+        }
+        .menu-left img {
+            width: 100px; /* Logoyu büyüttük (90px’den 100px’e) */
+            height: auto;
+            margin-right: 20px;
+        }
+        .menu-center {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .menu-center a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 10px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .menu-center a:hover, .menu-center a.active {
+            color: #ffffff;
+            background-color: #007bff; /* Aktif element negatif renk (mavi arkaplan, beyaz font) */
+            border-radius: 4px;
+        }
+        .menu-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .menu-right img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .menu-right span {
+            font-size: 16px;
+            font-weight: bold; /* "Merhaba, <kullanıcı adı>" yazısını kalın yaptık */
+            color: #333;
+        }
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+        }
+        .left-panel, .right-panel {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .middle-panel {
+            flex: 2;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .left-panel img {
+            width: 40px;
+            height: auto;
+            vertical-align: middle;
+        }
+        .left-panel .user-info, .left-panel .balance, .left-panel .transaction-title, .left-panel .transaction-date, .left-panel .transaction-item {
+            margin-bottom: 15px;
+        }
+        .left-panel .user-info {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: #333;
+        }
+        .left-panel .user-id {
+            font-size: 14px;
+            color: #666;
+        }
+        .left-panel .user-id span {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .left-panel .balance {
+            font-size: 36px;
+            font-weight: bold;
+            color: #000;
+        }
+        .left-panel .balance small {
+            font-size: 14px; /* "Bakiye:" ve "₺" karakterini küçük yaptık */
+            font-weight: normal;
+            margin-right: 5px;
+        }
+        .left-panel .transaction-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .left-panel .transaction-date {
+            font-size: 12px;
+            color: #999;
+            font-style: italic;
+        }
+        .left-panel .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            max-width: 100%; /* Divin içinde tek satırda sığması için */
+            overflow: hidden; /* Taşmaları gizle */
+        }
+        .left-panel .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .left-panel .transaction-icon img {
+            width: 30px; /* SVG boyutunu büyüttük (20px’den 30px’e) */
+            height: 30px;
+            object-fit: contain; /* SVG’nin yuvarlağa tam sığmasını sağla */
+        }
+        .left-panel .transaction-name {
+            font-size: 14px; /* Yazıları küçültüp kaba görünümü azalttık */
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+            white-space: nowrap; /* Tek satırda kal */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Taşarsa ... ile kes */
+        }
+        .left-panel .transaction-amount {
+            font-size: 14px; /* Yazıları küçültüp kaba görünümü azalttık */
+            font-weight: 600;
+            color: #007bff;
+            margin-right: 10px;
+            text-align: right; /* Miktarı sağa dayalı yaptık */
+            flex: 0 0 120px; /* Sabit genişlik, sağa dayalı için */
+            white-space: nowrap; /* Tek satırda kal */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Taşarsa ... ile kes */
+        }
+        .left-panel .transaction-time {
+            font-size: 12px;
+            color: #666;
+            margin-left: auto; /* Miktarın altına yerleştirmek için sağa kaydır */
+            display: block; /* Miktarın altına geç */
+        }
+        .middle-panel h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .middle-panel p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .middle-panel .input-group {
+            margin-bottom: 15px;
+        }
+        .middle-panel .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        .middle-panel .input-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .middle-panel .input-group input.placeholder {
+            color: #999;
+        }
+        .middle-panel .input-group .error {
+            border-color: #ff0000;
+            background-color: #ffebee;
+        }
+        .middle-panel .input-group .error-message {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .middle-panel .amount-input {
+            position: relative;
+        }
+        .middle-panel .amount-input input {
+            padding-right: 80px; /* Para formatı için sağ boşluk */
+            text-align: left; /* Imlecin düz devam etmesi için */
+        }
+        .middle-panel .amount-input small {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #999;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .middle-panel .description-input {
+            position: relative;
+        }
+        .middle-panel .description-input small {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        .middle-panel button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .middle-panel button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: #ff0000;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background-color: #ffebee;
+            border: 2px solid #ff0000;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            display: none;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .right-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .right-panel li {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #333;
+            position: relative;
+            padding-left: 40px;
+        }
+        .right-panel li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #ffffff; /* Yuvarlak arkaplanını beyaz yaptık */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .right-panel li img {
+            width: 20px;
+            height: 20px; /* SVG’yi yuvarlağa tam sığdır */
+            object-fit: contain; /* SVG’nin yuvarlağa sığmasını sağla */
+        }
+        .right-panel li small {
+            display: block;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .right-panel li:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 100%;
+            height: 1px;
+            background-color: #ddd;
+            opacity: 0.5;
+        }
+        .right-panel li a {
+            color: #333;
+            text-decoration: none;
+        }
+        .right-panel li a:hover {
+            color: #007bff;
+        }
+        @media (max-width: 768px) {
+            .panel-container {
+                padding: 10px;
+            }
+            .sticky-menu {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+            .menu-left, .menu-center, .menu-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .menu-center {
+                margin: 10px 0;
+            }
+            .main-content {
+                flex-direction: column;
+            }
+            .left-panel, .middle-panel, .right-panel {
+                width: 100%;
+            }
+            .right-panel li {
+                padding-left: 30px;
+            }
+            .right-panel li::before {
+                width: 25px;
+                height: 25px;
+            }
+            .right-panel li img {
+                width: 15px;
+                height: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="panel-container">
+        <div class="sticky-menu">
+            <div class="menu-left">
+                <img src="logo.png" alt="Paypara Logo" />
+            </div>
+            <div class="menu-center">
+                <a href="javascript:void(0)" onclick="showSection('send')" class="active">Para Gönderme</a>
+                <a href="javascript:void(0)" onclick="showSection('receive')">Para Alma</a>
+                <a href="javascript:void(0)" onclick="showSection('international')">Uluslararası Para Gönderme</a>
+                <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
+            </div>
+            <div class="menu-right">
+                <img src="user.png" alt="Kullanıcı Profili" />
+                <span>Merhaba, <span id="userName"></span></span>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="user-info">
+                    <img src="user.png" alt="Kullanıcı Profili" />
+                    <span id="welcomeUser"></span>
+                </div>
+                <div class="user-id">Benzersiz Kullanıcı No: <span>148280536456</span></div>
+                <div class="balance"><small>Bakiye:</small> <small>₺</small>1.266.358,00</div>
+                <div class="transaction-title">Para Transferleri</div>
+                <div class="transaction-date">Bugün, <span id="currentDate"></span></div>
+                <div class="transaction-item">
+                    <div class="transaction-icon">
+                        <img src="ziraat.svg" alt="Ziraat Bankası" />
+                    </div>
+                    <div>
+                        <div class="transaction-name">Lider Bahadır</div>
+                        <div class="transaction-amount">₺7.700,000</div>
+                        <div class="transaction-time">03:12</div>
+                    </div>
+                </div>
+                <div class="transaction-date">Dün, <span id="yesterdayDate"></span></div>
+                <div class="transaction-item">
+                    <div class="transaction-icon">
+                        <img src="isbank.svg" alt="İş Bankası" />
+                    </div>
+                    <div>
+                        <div class="transaction-name">Esra Gündoğdu</div>
+                        <div class="transaction-amount">₺2.000,000</div>
+                        <div class="transaction-time">21:22</div>
+                    </div>
+                </div>
+                <div class="transaction-item">
+                    <div class="transaction-icon">
+                        <img src="isbank.svg" alt="İş Bankası" />
+                    </div>
+                    <div>
+                        <div class="transaction-name">Ahmet Salih Erdinç</div>
+                        <div class="transaction-amount">₺5.500,000</div>
+                        <div class="transaction-time">21:13</div>
+                    </div>
+                </div>
+                <div class="transaction-item">
+                    <div class="transaction-icon">
+                        <img src="qnb.svg" alt="QNB Finansbank" />
+                    </div>
+                    <div>
+                        <div class="transaction-name">Yasin Tuna</div>
+                        <div class="transaction-amount">₺4.250,000</div>
+                        <div class="transaction-time">20:42</div>
+                    </div>
+                </div>
+            </div>
+            <div class="middle-panel" id="middleContent">
+                <!-- Varsayılan olarak Para Gönderme -->
+                <h2>Para Gönderme</h2>
+                <p>Herhangi bir bankanın IBAN’ına para transferi yapabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
+                <div class="input-group">
+                    <input type="text" id="sendName" placeholder="İsim Soyisim" required />
+                    <div id="nameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                </div>
+                <div class="input-group amount-input">
+                    <input type="text" id="sendAmount" placeholder="0,00 ₺" required />
+                    <small>Bakiye: 1.266.358,00</small>
+                </div>
+                <div class="input-group description-input">
+                    <input type="text" id="sendDescription" placeholder="Açıklama (Opsiyonel)" maxlength="150" />
+                    <small id="charCount">150 karakter kaldı</small>
+                </div>
+                <button onclick="sendMoney()">Gönder</button>
+            </div>
+            <div class="right-panel">
+                <ul>
+                    <li>
+                        <div class="transaction-icon"><img src="account.svg" alt="Hesap Detayları" /></div>
+                        <a href="panel.html?authenticated=true">Hesap Detayları</a> <small>(Hesap detaylarına göz at)</small>
+                    </li>
+                    <li>
+                        <div class="transaction-icon"><img src="help.svg" alt="Yardım" /></div>
+                        Yardım <small>(Öğrenmek istediğin konuyla alakalı bilgi al)</small>
+                    </li>
+                    <li>
+                        <div class="transaction-icon"><img src="notify.svg" alt="Bildirimler" /></div>
+                        Bildirimler <small>(Hesap bildirimlerini kontrol et)</small>
+                    </li>
+                    <li>
+                        <div class="transaction-icon"><img src="transaction.svg" alt="Son İşlemler" /></div>
+                        Son İşlemler <small>(Son yapılan işlemleri görüntüle)</small>
+                    </li>
+                    <li>
+                        <div class="transaction-icon"><img src="settings.svg" alt="Ayarlar" /></div>
+                        Ayarlar <small>(Kişisel bilgilerini güncelle)</small>
+                    </li>
+                    <li>
+                        <div class="transaction-icon"><img src="support.svg" alt="Canlı Destek" /></div>
+                        Canlı Destek <small>(Herhangi bir sorun varsa hemen iletişime geç)</small>
+                    </li>
+                    <li>
+                        <div class="transaction-icon"><img src="logout.svg" alt="Çıkış Yap" /></div>
+                        <a href="index.html" onclick="logout()">Çıkış Yap</a> <small>(Güvenli çıkış yap)</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL parametresini kontrol et
+        const urlParams = new URLSearchParams(window.location.search);
+        const isAuthenticated = urlParams.get('authenticated') === 'true';
+
+        // Eğer doğrulanmamışsa, login ekranına yönlendir
+        if (!isAuthenticated) {
+            window.location.href = 'index.html';
+        }
+
+        // Sayfayı yenilediğinde login ekranına yönlendir
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isAuthenticated = urlParams.get('authenticated') === 'true';
+
+            if (!isAuthenticated) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Kullanıcı bilgilerini localStorage’dan al
+        const currentUser = localStorage.getItem('currentUser') || 'Misafir';
+        document.getElementById('welcomeUser').textContent = currentUser;
+        document.getElementById('userName').textContent = currentUser;
+
+        // Çıkış yap fonksiyonu
+        function logout() {
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('currentUser');
+        }
+
+        // Dropdown’ı tıklama ile aç/kapat
+        let dropdownOpen = false;
+        function toggleDropdown() {
+            dropdownOpen = !dropdownOpen;
+            document.querySelector('.dropdown').classList.toggle('active', dropdownOpen);
+        }
+
+        // Dışarı tıklandığında dropdown’ı kapat
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const dropbtn = document.querySelector('.dropbtn');
+            if (!dropdown.contains(event.target) && event.target !== dropbtn) {
+                dropdownOpen = false;
+                document.querySelector('.dropdown').classList.remove('active');
+            }
+        });
+
+        // Tarih işlemleri
+        const today = new Date('2025-02-27'); // Sabit tarih
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        document.getElementById('yesterdayDate').textContent = yesterday.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        // Menüdeki aktif elementi güncelle
+        function showSection(section) {
+            const links = document.querySelectorAll('.menu-center a');
+            links.forEach(link => link.classList.remove('active'));
+            document.querySelector(`.menu-center a[onclick*="showSection('${section}')"]`).classList.add('active');
+
+            const middlePanel = document.getElementById('middleContent');
+            let content = '';
+
+            if (section === 'send') {
+                content = `
+                    <h2>Para Gönderme</h2>
+                    <p>Herhangi bir bankanın IBAN’ına para transferi yapabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
+                    <div class="input-group">
+                        <input type="text" id="sendName" placeholder="İsim Soyisim" required />
+                        <div id="nameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                    </div>
+                    <div class="input-group amount-input">
+                        <input type="text" id="sendAmount" placeholder="0,00 ₺" required />
+                        <small>Bakiye: 1.266.358,00</small>
+                    </div>
+                    <div class="input-group description-input">
+                        <input type="text" id="sendDescription" placeholder="Açıklama (Opsiyonel)" maxlength="150" />
+                        <small id="charCount">150 karakter kaldı</small>
+                    </div>
+                    <button onclick="sendMoney()">Gönder</button>
+                `;
+            } else if (section === 'receive') {
+                content = `
+                    <h2>Para Alma</h2>
+                    <p>Herhangi bir bankanın IBAN’ından para alabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
+                    <div class="input-group">
+                        <input type="text" id="receiveName" placeholder="İsim Soyisim" required />
+                        <div id="receiveNameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                    </div>
+                    <div class="input-group amount-input">
+                        <input type="text" id="receiveAmount" placeholder="0,00 ₺" required />
+                        <small>Bakiye: 1.266.358,00</small>
+                    </div>
+                    <div class="input-group description-input">
+                        <input type="text" id="receiveDescription" placeholder="Açıklama (Opsiyonel)" maxlength="150" />
+                        <small id="receiveCharCount">150 karakter kaldı</small>
+                    </div>
+                    <button onclick="receiveMoney()">Al</button>
+                `;
+            } else if (section === 'international') {
+                content = `
+                    <h2>Uluslararası Para Gönderme</h2>
+                    <p>Yabancı bankaların SWIFT kodlarıyla uluslararası para transferi yapabilirsiniz. Yukarıdaki menüyü inceleyin.</p>
+                    <div class="input-group">
+                        <input type="text" id="intlName" placeholder="İsim Soyisim" required />
+                        <div id="intlNameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                    </div>
+                    <div class="input-group amount-input">
+                        <input type="text" id="intlAmount" placeholder="0,00 ₺" required />
+                        <small>Bakiye: 1.266.358,00</small>
+                    </div>
+                    <div class="input-group description-input">
+                        <input type="text" id="intlDescription" placeholder="Açıklama (Opsiyonel)" maxlength="150" />
+                        <small id="intlCharCount">150 karakter kaldı</small>
+                    </div>
+                    <button onclick="sendInternationalMoney()">Gönder</button>
+                `;
+            } else if (section === 'crypto') {
+                content = `
+                    <h2>Kripto Para Gönderme</h2>
+                    <p>Bitcoin, Ethereum gibi kripto paralarla transfer yapabilirsiniz. Yukarıdaki menüyü inceleyin.</p>
+                    <div class="input-group">
+                        <input type="text" id="cryptoName" placeholder="İsim Soyisim" required />
+                        <div id="cryptoNameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                    </div>
+                    <div class="input-group amount-input">
+                        <input type="text" id="cryptoAmount" placeholder="0,00 ₺" required />
+                        <small>Bakiye: 1.266.358,00</small>
+                    </div>
+                    <div class="input-group description-input">
+                        <input type="text" id="cryptoDescription" placeholder="Açıklama (Opsiyonel)" maxlength="150" />
+                        <small id="cryptoCharCount">150 karakter kaldı</small>
+                    </div>
+                    <button onclick="sendCryptoMoney()">Gönder</button>
+                `;
+            }
+
+            document.getElementById('middleContent').innerHTML = content;
+            setupEventListeners(); // Yeni eklenen input’lar için event listener’ları kur
+        }
+
+        // Sayfayı yüklerken varsayılan olarak Para Gönderme göster
+        window.addEventListener('load', function() {
+            showSection('send');
+        });
+
+        // Event listener’ları kur
+        function setupEventListeners() {
+            // İsim soyisim iki kelime kontrolü
+            ['sendName', 'receiveName', 'intlName', 'cryptoName'].forEach(id => {
+                const input = document.getElementById(id);
+                const errorId = `${id}Error`;
+                if (input) {
+                    input.addEventListener('input', function() {
+                        const name = this.value.trim();
+                        const words = name.split(/\s+/).filter(word => word.length > 0);
+                        const errorMessage = document.getElementById(errorId);
+
+                        if (words.length < 2) {
+                            this.classList.add('error');
+                            errorMessage.style.display = 'block';
+                        } else {
+                            this.classList.remove('error');
+                            errorMessage.style.display = 'none';
+                        }
+                    });
+
+                    // Placeholder temizleme
+                    input.addEventListener('focus', function() {
+                        if (this.value === this.placeholder) {
+                            this.value = '';
+                            this.classList.remove('placeholder');
+                        }
+                    });
+                    input.addEventListener('blur', function() {
+                        if (!this.value) {
+                            this.value = this.placeholder;
+                            this.classList.add('placeholder');
+                        }
+                    });
+                }
+            });
+
+            // Açıklama karakter sınırlaması
+            ['sendDescription', 'receiveDescription', 'intlDescription', 'cryptoDescription'].forEach(id => {
+                const input = document.getElementById(id);
+                const charCountId = `${id.replace('Description', 'CharCount')}`;
+                if (input) {
+                    input.addEventListener('input', function() {
+                        const remaining = 150 - this.value.length;
+                        document.getElementById(charCountId).textContent = `${remaining} karakter kaldı`;
+                    });
+                }
+            });
+
+            // Para formatı için input (₺ her zaman kalacak, harfler engellenecek)
+            ['sendAmount', 'receiveAmount', 'intlAmount', 'cryptoAmount'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = this.value.replace(/[^0-9]/g, ''); // Sadece sayılar kabul et, harfleri engelle
+                        if (value === '') {
+                            this.value = '0,00 ₺';
+                            return;
+                        }
+
+                        // Virgülden önceki kısmı 3’erli gruplar halinde noktalı yap
+                        value = value.padEnd(3, '0'); // En az 3 hane için 0 ekle
+                        let integerPart = value.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // 3 haneli gruplar
+                        let decimalPart = value.slice(-2); // 2 basamaklı kuruş
+                        this.value = `${integerPart},${decimalPart} ₺`;
+
+                        // Imleci her zaman sayının soluna yerleştir, ₺ sabit kalsın
+                        setTimeout(() => {
+                            const cursorPosition = this.value.indexOf('₺') + 1;
+                            this.selectionStart = this.selectionEnd = cursorPosition;
+                        }, 0);
+
+                        // Maksimum 12 hane (milyonlar) sınırla
+                        if (integerPart.replace(/\./g, '').length > 12) {
+                            this.value = '999.999.999.999,99 ₺';
+                        }
+                    });
+
+                    // Placeholder temizleme ve ₺’yi sabit tut
+                    input.addEventListener('focus', function() {
+                        if (this.value === '0,00 ₺') {
+                            this.value = '';
+                        }
+                    });
+                    input.addEventListener('blur', function() {
+                        if (!this.value || this.value === '') {
+                            this.value = '0,00 ₺';
+                        }
+                    });
+                }
+            });
+        }
+
+        // Para Gönder simülasyonu
+        function sendMoney() {
+            const name = document.getElementById('sendName').value.trim();
+            const amount = document.getElementById('sendAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
+            const words = name.split(/\s+/).filter(word => word.length > 0);
+
+            if (words.length < 2) {
+                document.getElementById('sendName').classList.add('error');
+                document.getElementById('nameError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('sendName').classList.remove('error');
+                document.getElementById('nameError').style.display = 'none';
+            }
+
+            if (name && amount) {
+                const balance = 1266358.00; // Bakiye (noktalı formatta)
+                const parsedAmount = parseFloat(amount);
+                if (parsedAmount > balance) {
+                    document.getElementById('middleContent').innerHTML += `
+                        <div class="error-message">Transaction Failed<br>You don't have a sufficient balance in your account to complete this transaction.</div>
+                    `;
+                } else {
+                    alert(`Para ${name}’e, ${amount.replace('.', ',')} ₺ gönderildi!`);
+                }
+            } else {
+                alert('Lütfen tüm zorunlu alanları doldurun.');
+            }
+        }
+
+        // Diğer işlemler için simülasyon (aynı mantıkla)
+        function receiveMoney() {
+            const name = document.getElementById('receiveName').value.trim();
+            const amount = document.getElementById('receiveAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
+            const words = name.split(/\s+/).filter(word => word.length > 0);
+
+            if (words.length < 2) {
+                document.getElementById('receiveName').classList.add('error');
+                document.getElementById('receiveNameError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('receiveName').classList.remove('error');
+                document.getElementById('receiveNameError').style.display = 'none';
+            }
+
+            if (name && amount) {
+                alert(`Para ${name}’den, ${amount.replace('.', ',')} ₺ alındı!`);
+            } else {
+                alert('Lütfen tüm zorunlu alanları doldurun.');
+            }
+        }
+
+        function sendInternationalMoney() {
+            const name = document.getElementById('intlName').value.trim();
+            const amount = document.getElementById('intlAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
+            const words = name.split(/\s+/).filter(word => word.length > 0);
+
+            if (words.length < 2) {
+                document.getElementById('intlName').classList.add('error');
+                document.getElementById('intlNameError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('intlName').classList.remove('error');
+                document.getElementById('intlNameError').style.display = 'none';
+            }
+
+            if (name && amount) {
+                const balance = 1266358.00; // Bakiye
+                const parsedAmount = parseFloat(amount);
+                if (parsedAmount > balance) {
+                    document.getElementById('middleContent').innerHTML += `
+                        <div class="error-message">Transaction Failed<br>You don't have a sufficient balance in your account to complete this transaction.</div>
+                    `;
+                } else {
+                    alert(`Uluslararası para ${name}’e, ${amount.replace('.', ',')} ₺ gönderildi!`);
+                }
+            } else {
+                alert('Lütfen tüm zorunlu alanları doldurun.');
+            }
+        }
+
+        function sendCryptoMoney() {
+            const name = document.getElementById('cryptoName').value.trim();
+            const amount = document.getElementById('cryptoAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
+            const words = name.split(/\s+/).filter(word => word.length > 0);
+
+            if (words.length < 2) {
+                document.getElementById('cryptoName').classList.add('error');
+                document.getElementById('cryptoNameError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('cryptoName').classList.remove('error');
+                document.getElementById('cryptoNameError').style.display = 'none';
+            }
+
+            if (name && amount) {
+                const balance = 1266358.00; // Bakiye
+                const parsedAmount = parseFloat(amount);
+                if (parsedAmount > balance) {
+                    document.getElementById('middleContent').innerHTML += `
+                        <div class="error-message">Transaction Failed<br>You don't have a sufficient balance in your account to complete this transaction.</div>
+                    `;
+                } else {
+                    alert(`Kripto para ${name}’e, ${amount.replace('.', ',')} ₺ gönderildi!`);
+                }
+            } else {
+                alert('Lütfen tüm zorunlu alanları doldurun.');
+            }
+        }
+    </script>
+</body>
+</html>
