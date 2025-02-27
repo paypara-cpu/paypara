@@ -62,7 +62,7 @@
             height: auto;
         }
         .main-content {
-            padding: 80px 10px 10px; /* Üst menüden daha fazla boşluk bırak (80px) */
+            padding: 80px 10px 10px; /* Üst menüden daha fazla boşluk bırak (80px, sayfa içeriğini aşağıda tut) */
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -543,7 +543,8 @@
             panel.classList.toggle('active');
             activeMenu = panel.classList.contains('active') ? side : null;
 
-            // Menü dışında tıklama ile kapatma
+            // Menü dışında tıklama ile kapatma event listener’ını ekle veya güncelle
+            document.removeEventListener('click', closeMenuOnOutsideClick, true); // Önceki listener’ı kaldır
             document.addEventListener('click', closeMenuOnOutsideClick, true);
         }
 
