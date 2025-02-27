@@ -31,10 +31,11 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Logoyu tam ortaya al */
             align-items: center;
         }
         .menu-toggle, .user-toggle {
+            position: absolute; /* Üst menüde hamburger ve user butonlarını köşelere yerleştir */
             background: none;
             border: none;
             cursor: pointer;
@@ -49,6 +50,16 @@
         .user-toggle img {
             width: 30px;
             height: 30px;
+        }
+        .menu-toggle {
+            left: 15px; /* Sol köşeye yerleştir */
+        }
+        .user-toggle {
+            right: 15px; /* Sağ köşeye yerleştir */
+        }
+        .sticky-menu img.logo {
+            width: 100px; /* Logoyu 100px olarak koruduk */
+            height: auto;
         }
         .main-content {
             padding: 60px 10px 10px; /* Üst menü için boşluk */
@@ -90,12 +101,7 @@
             height: auto;
             vertical-align: middle;
         }
-        .left-panel .logo {
-            width: 100px; /* Logoyu 100px olarak koruduk */
-            height: auto;
-            margin-bottom: 15px;
-        }
-        .left-panel .user-info, .left-panel .balance, .left-panel .transaction-title, .left-panel .transaction-date, .left-panel .transaction-item {
+        .left-panel .user-info, .left-panel .balance, .left-panel .menu-nav, .left-panel .transaction-title, .left-panel .transaction-date, .left-panel .transaction-item {
             margin-bottom: 15px;
         }
         .left-panel .user-info {
@@ -121,6 +127,25 @@
             font-size: 12px; /* Mobil için küçülttük */
             font-weight: normal;
             margin-right: 5px;
+        }
+        .left-panel .menu-nav {
+            margin-top: 10px; /* Menü elementlerini para transferlerinin üstüne yerleştir */
+        }
+        .left-panel .menu-nav a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .left-panel .menu-nav a:hover, .left-panel .menu-nav a.active {
+            background-color: #007bff;
+            color: #ffffff;
         }
         .left-panel .transaction-title {
             font-size: 18px; /* Mobil için küçülttük */
@@ -347,22 +372,18 @@
 <body>
     <div class="panel-container">
         <div class="sticky-menu">
-            <div class="menu-left">
-                <button class="menu-toggle" onclick="toggleMenu('left')"><img src="menu.svg" alt="Menu" /></button>
-            </div>
-            <div class="menu-center">
-                <a href="javascript:void(0)" onclick="showSection('send')" class="active">Para Gönderme</a>
-                <a href="javascript:void(0)" onclick="showSection('receive')">Para Alma</a>
-                <a href="javascript:void(0)" onclick="showSection('international')">Uluslararası Para Gönderme</a>
-                <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
-            </div>
-            <div class="menu-right">
-                <button class="user-toggle" onclick="toggleMenu('right')"><img src="user.svg" alt="Kullanıcı Profili" /></button>
-            </div>
+            <button class="menu-toggle" onclick="toggleMenu('left')"><img src="menu.svg" alt="Menu" /></button>
+            <img src="logo.png" alt="Paypara Logo" class="logo" />
+            <button class="user-toggle" onclick="toggleMenu('right')"><img src="user.svg" alt="Kullanıcı Profili" /></button>
         </div>
         <div class="main-content">
             <div class="left-panel">
-                <img src="logo.png" alt="Paypara Logo" class="logo" /> <!-- Sol menü açıldığında logo en üstte -->
+                <div class="menu-nav">
+                    <a href="javascript:void(0)" onclick="showSection('send')" class="active">Para Gönderme</a>
+                    <a href="javascript:void(0)" onclick="showSection('receive')">Para Alma</a>
+                    <a href="javascript:void(0)" onclick="showSection('international')">Uluslararası Para Gönderme</a>
+                    <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
+                </div>
                 <div class="user-info">
                     <img src="user.svg" alt="Kullanıcı Profili" />
                     <span id="welcomeUser"></span>
@@ -515,9 +536,9 @@
 
         // Menüdeki aktif elementi güncelle
         function showSection(section) {
-            const links = document.querySelectorAll('.menu-center a');
+            const links = document.querySelectorAll('.left-panel .menu-nav a');
             links.forEach(link => link.classList.remove('active'));
-            document.querySelector(`.menu-center a[onclick*="showSection('${section}')"]`).classList.add('active');
+            document.querySelector(`.left-panel .menu-nav a[onclick*="showSection('${section}')"]`).classList.add('active');
 
             const middlePanel = document.getElementById('middleContent');
             let content = '';
