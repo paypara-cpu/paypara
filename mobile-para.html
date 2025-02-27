@@ -129,7 +129,7 @@
             margin-right: 5px;
         }
         .left-panel .menu-nav {
-            margin-top: 0; /* Menü elementlerini güncel bakiyenin hemen altına yerleştir */
+            margin-top: 30px; /* "Bakiye:"den sonra 1 satır boşluk, ardından 2 satır daha boşluk */
         }
         .left-panel .menu-nav a {
             display: block;
@@ -137,20 +137,23 @@
             text-decoration: none;
             font-size: 16px;
             font-weight: 600;
-            padding: 10px;
+            padding: 12px; /* Daha belirgin padding */
             margin-bottom: 5px;
-            background-color: #f8f9fa;
+            background-color: #d1d9e6; /* Daha belirgin arkaplan rengi */
             border-radius: 8px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Hafif gölge ile ön plana çıkar */
         }
         .left-panel .menu-nav a:hover, .left-panel .menu-nav a.active {
             background-color: #007bff;
             color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Hover’da daha belirgin gölge */
         }
         .left-panel .transaction-title {
             font-size: 18px; /* Mobil için küçülttük */
             font-weight: bold;
             color: #333;
+            margin-top: 30px; /* Menüden sonra 2 satır boşluk */
         }
         .left-panel .transaction-date {
             font-size: 12px;
@@ -385,13 +388,16 @@
                 </div>
                 <div class="user-id">Benzersiz Kullanıcı No: <span>148280536456</span></div>
                 <div class="balance"><small>Bakiye:</small> <small>₺</small>1.266.358,00</div>
+                <div style="margin-bottom: 15px;"></div> <!-- 1 satır boşluk -->
+                <div style="margin-bottom: 30px;"></div> <!-- 2 satır boşluk -->
                 <div class="menu-nav">
                     <a href="javascript:void(0)" onclick="showSection('send')" class="active">Para Gönderme</a>
                     <a href="javascript:void(0)" onclick="showSection('receive')">Para Alma</a>
                     <a href="javascript:void(0)" onclick="showSection('international')">Uluslararası Para Gönderme</a>
                     <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
                 </div>
-                <div class="transaction-title">Para Transferleri</div>
+                <div style="margin-bottom: 30px;"></div> <!-- 2 satır boşluk -->
+                <div class="transaction-title">PARA TRANSFERLERI ⤵</div>
                 <div class="transaction-date">Bugün, <span id="currentDate"></span></div>
                 <div class="transaction-item">
                     <div class="transaction-icon">
