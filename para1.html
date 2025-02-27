@@ -751,8 +751,9 @@
                     input.addEventListener('input', function(e) {
                         let value = this.value.replace(/[^0-9]/g, '');
                         if (value.length > 16) value = value.slice(0, 16);
-                        let formatted = 'TR';
+                        let formatted = '';
                         for (let i = 0; i < value.length; i++) {
+                            if (i === 0) formatted = 'TR';
                             if (i === 2 || i === 6 || i === 10) formatted += ' ';
                             formatted += value[i];
                         }
@@ -777,8 +778,9 @@
                         e.preventDefault();
                         let pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
                         if (pasted.length > 16) pasted = pasted.slice(0, 16);
-                        let formatted = 'TR';
+                        let formatted = '';
                         for (let i = 0; i < pasted.length; i++) {
+                            if (i === 0) formatted = 'TR';
                             if (i === 2 || i === 6 || i === 10) formatted += ' ';
                             formatted += pasted[i];
                         }
