@@ -232,7 +232,7 @@
             padding-right: 80px; /* Para ve IBAN formatı için sağ boşluk */
             text-align: left; /* Imlecin düz devam etmesi için */
         }
-        .middle-panel .amount-input small, .middle-panel .iban-input small {
+        .middle-panel .amount-input small {
             position: absolute;
             right: 10px;
             top: 50%;
@@ -339,6 +339,8 @@
         .right-panel li a:hover {
             color: #007bff;
         }
+
+        /* Mobil Görünüm için Açılır/Kapanır Menü */
         @media (max-width: 768px) {
             .panel-container {
                 padding: 10px;
@@ -358,19 +360,51 @@
             .main-content {
                 flex-direction: column;
             }
-            .left-panel, .middle-panel, .right-panel {
+            .middle-panel {
+                width: 100%;
+                order: 2; /* Orta menü ortada kalsın */
+            }
+            .left-panel, .right-panel {
+                width: 100%;
+                display: none; /* Varsayılan olarak gizli */
+                position: fixed;
+                top: 60px; /* Üst menüden sonra başlasın */
+                bottom: 0;
+                z-index: 1001;
+                background-color: #ffffff;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease;
+                transform: translateX(-100%); /* Sol menü soldan girsin */
+            }
+            .right-panel {
+                transform: translateX(100%); /* Sağ menü sağdan girsin */
+                left: auto;
+                right: 0;
+            }
+            .left-panel.active, .right-panel.active {
+                display: block;
+                transform: translateX(0); /* Açıldığında tam göster */
+            }
+            .menu-toggle {
+                display: block;
+                font-size: 24px;
+                cursor: pointer;
+                padding: 10px;
+                background: none;
+                border: none;
+                color: #333;
+            }
+            .menu-left, .menu-right {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
                 width: 100%;
             }
-            .right-panel li {
-                grid-template-columns: 30px 1fr; /* Mobil için ikon sütununu küçült */
+            .menu-toggle.left {
+                order: -1; /* Sol menü butonu sola */
             }
-            .right-panel .transaction-icon {
-                width: 30px;
-                height: 30px;
-            }
-            .right-panel .transaction-icon img {
-                width: 15px;
-                height: 15px;
+            .menu-toggle.right {
+                order: 1; /* Sağ menü butonu sağa */
             }
         }
     </style>
@@ -379,6 +413,7 @@
     <div class="panel-container">
         <div class="sticky-menu">
             <div class="menu-left">
+                <button class="menu-toggle left" onclick="toggleMenu('left')">☰</button>
                 <img src="logo.png" alt="Paypara Logo" />
             </div>
             <div class="menu-center">
@@ -390,6 +425,7 @@
             <div class="menu-right">
                 <img src="user.svg" alt="Kullanıcı Profili" /> <!-- user.png yerine user.svg kullanıyoruz -->
                 <span>Merhaba, <span id="userName"></span></span>
+                <button class="menu-toggle right" onclick="toggleMenu('right')">☰</button>
             </div>
         </div>
         <div class="main-content">
@@ -454,7 +490,6 @@
                 </div>
                 <div class="input-group iban-input">
                     <input type="text" id="sendIban" placeholder="IBAN" required />
-                    <small>TR </small> <!-- Sabit "TR " yazısı -->
                 </div>
                 <div class="input-group amount-input">
                     <input type="text" id="sendAmount" placeholder="0,00 ₺" required />
@@ -575,7 +610,6 @@
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="sendIban" placeholder="IBAN" required />
-                        <small>TR </small> <!-- Sabit "TR " yazısı -->
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="sendAmount" placeholder="0,00 ₺" required />
@@ -597,7 +631,6 @@
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="receiveIban" placeholder="IBAN" required />
-                        <small>TR </small> <!-- Sabit "TR " yazısı -->
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="receiveAmount" placeholder="0,00 ₺" required />
@@ -619,7 +652,6 @@
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="intlIban" placeholder="IBAN" required />
-                        <small>TR </small> <!-- Sabit "TR " yazısı -->
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="intlAmount" placeholder="0,00 ₺" required />
@@ -641,7 +673,6 @@
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="cryptoIban" placeholder="IBAN" required />
-                        <small>TR </small> <!-- Sabit "TR " yazısı -->
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="cryptoAmount" placeholder="0,00 ₺" required />
@@ -663,6 +694,12 @@
         window.addEventListener('load', function() {
             showSection('send');
         });
+
+        // Mobil menü toggle fonksiyonu
+        function toggleMenu(side) {
+            const panel = document.querySelector(`.${side}-panel`);
+            panel.classList.toggle('active');
+        }
 
         // Event listener’ları kur
         function setupEventListeners() {
