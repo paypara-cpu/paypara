@@ -665,11 +665,11 @@
                 const errorId = `${id}Error`;
                 if (input) {
                     input.addEventListener('input', function() {
-                        let value = this.value.trim();
+                        let value = this.value;
                         value = value.replace(/[^a-zA-ZçğıöşüÇĞİÖŞÜ\s]/g, '');
-                        value = value.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+                        value = value.replace(/\b\w/g, l => l.toUpperCase());
                         this.value = value;
-                        const words = value.split(/\s+/).filter(word => word.length > 0);
+                        const words = value.trim().split(/\s+/).filter(word => word.length > 0);
                         const errorMessage = document.getElementById(errorId);
 
                         if (words.length < 2 || words.some(word => word.length === 0)) {
@@ -762,6 +762,7 @@
 
                     input.addEventListener('focus', function() {
                         if (this.value === '') this.value = 'TR';
+                        else if (this.value === 'TR') this.value = 'TR';
                     });
                     input.addEventListener('blur', function() {
                         if (!this.value || this.value === 'TR') this.value = 'TR';
