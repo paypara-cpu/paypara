@@ -38,7 +38,7 @@
             align-items: center;
         }
         .menu-left img {
-            width: 100px; /* Logoyu büyüttük (90px’den 100px’e) */
+            width: 100px; /* Logoyu 100px olarak koruduk */
             height: auto;
             margin-right: 20px;
         }
@@ -159,12 +159,12 @@
             margin-right: 10px;
         }
         .left-panel .transaction-icon img {
-            width: 30px; /* SVG boyutunu büyüttük (20px’den 30px’e) */
-            height: 30px;
+            width: 20px; /* SVG boyutlarını küçülttük (30px’den 20px’e) */
+            height: 20px;
             object-fit: contain; /* SVG’nin yuvarlağa tam sığmasını sağla */
         }
         .left-panel .transaction-name {
-            font-size: 14px; /* Yazıları küçültüp kaba görünümü azalttık */
+            font-size: 12px; /* Yazıları küçülttük (14px’den 12px’e) */
             font-weight: 600;
             color: #333;
             flex: 1;
@@ -173,7 +173,7 @@
             text-overflow: ellipsis; /* Taşarsa ... ile kes */
         }
         .left-panel .transaction-amount {
-            font-size: 14px; /* Yazıları küçültüp kaba görünümü azalttık */
+            font-size: 12px; /* Yazıları küçülttük (14px’den 12px’e) */
             font-weight: 600;
             color: #007bff;
             margin-right: 10px;
@@ -184,7 +184,7 @@
             text-overflow: ellipsis; /* Taşarsa ... ile kes */
         }
         .left-panel .transaction-time {
-            font-size: 12px;
+            font-size: 10px; /* Yazıları küçülttük (12px’den 10px’e) */
             color: #666;
             margin-left: auto; /* Miktarın altına yerleştirmek için sağa kaydır */
             display: block; /* Miktarın altına geç */
@@ -511,12 +511,12 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isAuthenticated = urlParams.get('authenticated') === 'true';
 
-        // Eğer doğrulanmamışsa, login ekranına yönlendir
+        // Eğer doğrulanmamışsa, login ekranına yönlendirme
         if (!isAuthenticated) {
             window.location.href = 'index.html';
         }
 
-        // Sayfayı yenilediğinde login ekranına yönlendir
+        // Sayfayı yenilediğinde login ekranına yönlendirme
         window.addEventListener('load', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const isAuthenticated = urlParams.get('authenticated') === 'true';
@@ -537,7 +537,7 @@
             localStorage.removeItem('currentUser');
         }
 
-        // Dropdown’ı tıklama ile aç/kapat
+        // Dropdown’ı tıklama ile aç/kapat (şimdi kullanılmıyor, ama koruduk)
         let dropdownOpen = false;
         function toggleDropdown() {
             dropdownOpen = !dropdownOpen;
