@@ -124,7 +124,7 @@
             color: #000;
         }
         .left-panel .balance small {
-            font-size: 24px; /* ₺ karakterini "1.266.358,00" boyutuna getirdik */
+            font-size: 14px; /* "Bakiye" ve "₺" karakterini küçük yaptık */
             font-weight: normal;
             margin-right: 5px;
         }
@@ -145,6 +145,8 @@
             background-color: #f8f9fa;
             border-radius: 8px;
             margin-bottom: 10px;
+            max-width: 100%; /* Divin içinde tek satırda sığması için */
+            overflow: hidden; /* Taşmaları gizle */
         }
         .left-panel .transaction-icon {
             width: 40px;
@@ -166,6 +168,9 @@
             font-weight: 600;
             color: #333;
             flex: 1;
+            white-space: nowrap; /* Tek satırda kal */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Taşarsa ... ile kes */
         }
         .left-panel .transaction-amount {
             font-size: 14px; /* Yazıları küçültüp kaba görünümü azalttık */
@@ -174,10 +179,14 @@
             margin-right: 10px;
             text-align: right; /* Miktarı sağa dayalı yaptık */
             flex: 0 0 120px; /* Sabit genişlik, sağa dayalı için */
+            white-space: nowrap; /* Tek satırda kal */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Taşarsa ... ile kes */
         }
         .left-panel .transaction-time {
             font-size: 12px;
             color: #666;
+            margin-left: auto; /* Miktarın altına yerleştirmek için sağa kaydır */
         }
         .middle-panel h2 {
             font-size: 28px;
@@ -312,7 +321,8 @@
         }
         .right-panel li img {
             width: 20px;
-            height: auto;
+            height: 20px; /* SVG’yi yuvarlağa tam sığdır */
+            object-fit: contain; /* SVG’nin yuvarlağa sığmasını sağla */
         }
         .right-panel li small {
             display: block;
@@ -368,6 +378,7 @@
             }
             .right-panel li img {
                 width: 15px;
+                height: 15px;
             }
         }
     </style>
