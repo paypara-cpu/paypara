@@ -62,7 +62,7 @@
             height: auto;
         }
         .main-content {
-            padding: 60px 10px 10px; /* Üst menü için boşluk */
+            padding: 80px 10px 10px; /* Üst menüden daha fazla boşluk bırak (80px) */
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -129,7 +129,7 @@
             margin-right: 5px;
         }
         .left-panel .menu-nav {
-            margin-top: 10px; /* Menü elementlerini para transferlerinin üstüne yerleştir */
+            margin-top: 0; /* Menü elementlerini güncel bakiyenin hemen altına yerleştir */
         }
         .left-panel .menu-nav a {
             display: block;
@@ -378,18 +378,18 @@
         </div>
         <div class="main-content">
             <div class="left-panel">
-                <div class="menu-nav">
-                    <a href="javascript:void(0)" onclick="showSection('send')" class="active">Para Gönderme</a>
-                    <a href="javascript:void(0)" onclick="showSection('receive')">Para Alma</a>
-                    <a href="javascript:void(0)" onclick="showSection('international')">Uluslararası Para Gönderme</a>
-                    <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
-                </div>
                 <div class="user-info">
                     <img src="user.svg" alt="Kullanıcı Profili" />
                     <span id="welcomeUser"></span>
                 </div>
                 <div class="user-id">Benzersiz Kullanıcı No: <span>148280536456</span></div>
                 <div class="balance"><small>Bakiye:</small> <small>₺</small>1.266.358,00</div>
+                <div class="menu-nav">
+                    <a href="javascript:void(0)" onclick="showSection('send')" class="active">Para Gönderme</a>
+                    <a href="javascript:void(0)" onclick="showSection('receive')">Para Alma</a>
+                    <a href="javascript:void(0)" onclick="showSection('international')">Uluslararası Para Gönderme</a>
+                    <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
+                </div>
                 <div class="transaction-title">Para Transferleri</div>
                 <div class="transaction-date">Bugün, <span id="currentDate"></span></div>
                 <div class="transaction-item">
@@ -521,10 +521,51 @@
             localStorage.removeItem('currentUser');
         }
 
-        // Menü toggle fonksiyonu
+        // Menü toggle fonksiyonu (sadece bir menü açık kalsın)
+        let activeMenu = null;
         function toggleMenu(side) {
             const panel = document.querySelector(`.${side}-panel`);
+            const otherPanel = side === 'left' ? document.querySelector('.right-panel') : document.querySelector('.left-panel');
+
+            // Eğer aynı menüye tıklanıyorsa, kapat
+            if (activeMenu === side) {
+                panel.classList.remove('active');
+                activeMenu = null;
+                return;
+            }
+
+            // Diğer menüyü kapat
+            if (otherPanel && otherPanel.classList.contains('active')) {
+                otherPanel.classList.remove('active');
+            }
+
+            // Mevcut menüyü aç/kapat
             panel.classList.toggle('active');
+            activeMenu = panel.classList.contains('active') ? side : null;
+
+            // Menü dışında tıklama ile kapatma
+            document.addEventListener('click', closeMenuOnOutsideClick, true);
+        }
+
+        // Menü dışında tıklama ile kapatma
+        function closeMenuOnOutsideClick(event) {
+            const leftPanel = document.querySelector('.left-panel');
+            const rightPanel = document.querySelector('.right-panel');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const userToggle = document.querySelector('.user-toggle');
+
+            if (!leftPanel.contains(event.target) && !rightPanel.contains(event.target) && 
+                event.target !== menuToggle && event.target !== userToggle && 
+                !menuToggle.contains(event.target) && !userToggle.contains(event.target)) {
+                if (leftPanel.classList.contains('active')) {
+                    leftPanel.classList.remove('active');
+                    activeMenu = null;
+                }
+                if (rightPanel.classList.contains('active')) {
+                    rightPanel.classList.remove('active');
+                    activeMenu = null;
+                }
+            }
         }
 
         // Tarih işlemleri
