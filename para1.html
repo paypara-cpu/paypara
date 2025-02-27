@@ -460,7 +460,7 @@
                 <p>Herhangi bir bankanın IBAN’ına para transferi yapabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
                 <div class="input-group">
                     <input type="text" id="sendName" placeholder="İsim Soyisim" required>
-                    <div id="nameError" class="error-message">Lütfen en az iki kelime girin.</div>
+                    <div id="nameError" class="error-message">Lütfen en az iki kelime girin ve sadece harf kullanın.</div>
                 </div>
                 <div class="input-group iban-input">
                     <input type="text" id="sendIban" placeholder="IBAN" required>
@@ -571,7 +571,7 @@
                     <p>Herhangi bir bankanın IBAN’ına para transferi yapabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="sendName" placeholder="İsim Soyisim" required>
-                        <div id="nameError" class="error-message">Lütfen en az iki kelime girin.</div>
+                        <div id="nameError" class="error-message">Lütfen en az iki kelime girin ve sadece harf kullanın.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="sendIban" placeholder="IBAN" required>
@@ -592,7 +592,7 @@
                     <p>Herhangi bir bankanın IBAN’ından para alabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="receiveName" placeholder="İsim Soyisim" required>
-                        <div id="receiveNameError" class="error-message">Lütfen en az iki kelime girin.</div>
+                        <div id="receiveNameError" class="error-message">Lütfen en az iki kelime girin ve sadece harf kullanın.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="receiveIban" placeholder="IBAN" required>
@@ -613,7 +613,7 @@
                     <p>Yabancı bankaların SWIFT kodlarıyla uluslararası para transferi yapabilirsiniz. Yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="intlName" placeholder="İsim Soyisim" required>
-                        <div id="intlNameError" class="error-message">Lütfen en az iki kelime girin.</div>
+                        <div id="intlNameError" class="error-message">Lütfen en az iki kelime girin ve sadece harf kullanın.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="intlIban" placeholder="IBAN" required>
@@ -634,7 +634,7 @@
                     <p>Bitcoin, Ethereum gibi kripto paralarla transfer yapabilirsiniz. Yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="cryptoName" placeholder="İsim Soyisim" required>
-                        <div id="cryptoNameError" class="error-message">Lütfen en az iki kelime girin.</div>
+                        <div id="cryptoNameError" class="error-message">Lütfen en az iki kelime girin ve sadece harf kullanın.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="cryptoIban" placeholder="IBAN" required>
@@ -666,6 +666,7 @@
                 if (input) {
                     input.addEventListener('input', function() {
                         let value = this.value.trim();
+                        value = value.replace(/[^a-zA-ZçğıöşüÇĞİÖŞÜ\s]/g, '');
                         value = value.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                         this.value = value;
                         const words = value.split(/\s+/).filter(word => word.length > 0);
@@ -749,51 +750,34 @@
                 if (input) {
                     input.addEventListener('input', function(e) {
                         let value = this.value.replace(/[^0-9]/g, '');
-                        if (value.length > 0) {
-                            let masked = 'TR';
-                            for (let i = 0; i < value.length; i++) {
-                                masked += (i > 1 && i % 4 === 2 && i < value.length - 1) ? ' ' + value[i] : value[i];
-                                if (i > 1 && i % 4 === 1 && i < value.length - 1) masked += ' **** ';
-                            }
-                            this.value = masked;
-                        } else {
-                            this.value = '';
+                        if (value.length > 16) value = value.slice(0, 16);
+                        let formatted = 'TR';
+                        for (let i = 0; i < value.length; i++) {
+                            if (i === 2 || i === 6 || i === 10) formatted += ' ';
+                            formatted += value[i];
                         }
-
-                        setTimeout(() => {
-                            this.selectionStart = this.selectionEnd = this.value.length;
-                        }, 0);
-
-                        if (value.length > 16) {
-                            this.value = this.value.slice(0, 24); // "TR** **** **** **** **" formatı için maksimum uzunluk
-                        }
+                        this.value = formatted;
+                        setTimeout(() => this.selectionStart = this.selectionEnd = this.value.length, 0);
                     });
 
                     input.addEventListener('focus', function() {
-                        if (this.value === '') {
-                            this.value = '';
-                        }
+                        if (this.value === '') this.value = 'TR';
                     });
                     input.addEventListener('blur', function() {
-                        if (!this.value) {
-                            this.value = '';
-                        }
+                        if (!this.value || this.value === 'TR') this.value = 'TR';
                     });
 
                     input.addEventListener('paste', function(e) {
                         e.preventDefault();
-                        let pastedText = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
-                        if (pastedText.length > 16) pastedText = pastedText.slice(0, 16);
-                        let masked = 'TR';
-                        for (let i = 0; i < pastedText.length; i++) {
-                            masked += (i > 1 && i % 4 === 2 && i < pastedText.length - 1) ? ' ' + pastedText[i] : pastedText[i];
-                            if (i > 1 && i % 4 === 1 && i < pastedText.length - 1) masked += ' **** ';
+                        let pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+                        if (pasted.length > 16) pasted = pasted.slice(0, 16);
+                        let formatted = 'TR';
+                        for (let i = 0; i < pasted.length; i++) {
+                            if (i === 2 || i === 6 || i === 10) formatted += ' ';
+                            formatted += pasted[i];
                         }
-                        this.value = masked;
-
-                        setTimeout(() => {
-                            this.selectionStart = this.selectionEnd = this.value.length;
-                        }, 0);
+                        this.value = formatted;
+                        setTimeout(() => this.selectionStart = this.selectionEnd = this.value.length, 0);
                     });
                 }
             });
