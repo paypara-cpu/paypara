@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="utf-8">
-    <title>Paypara - Para İşlemleri (Mobil)</title>
+    <title>Paypara - Para İşlemleri</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon ekleme -->
     <style>
         body {
@@ -16,45 +16,43 @@
         .panel-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 0;
+            gap: 20px;
         }
         .sticky-menu {
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
             background-color: #ffffff;
             padding: 10px 20px;
-            border-radius: 0 0 8px 8px;
+            border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .menu-left, .menu-right {
+        .menu-left {
             display: flex;
             align-items: center;
         }
         .menu-left img {
             width: 100px; /* Logoyu 100px olarak koruduk */
             height: auto;
-            margin-right: 10px;
+            margin-right: 20px;
         }
         .menu-center {
             display: flex;
-            gap: 10px;
+            gap: 20px;
             align-items: center;
         }
         .menu-center a {
             color: #333;
             text-decoration: none;
-            font-size: 14px; /* Mobil için küçülttük */
+            font-size: 16px;
             font-weight: 600;
-            padding: 8px;
+            padding: 10px;
             transition: color 0.3s ease;
             position: relative;
         }
@@ -63,52 +61,39 @@
             background-color: #007bff; /* Aktif element negatif renk (mavi arkaplan, beyaz font) */
             border-radius: 4px;
         }
-        .menu-toggle, .user-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-            font-size: 24px;
-            color: #333;
+        .menu-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .user-toggle img {
+        .menu-right img {
             width: 30px;
             height: 30px;
+            margin-right: 5px;
+        }
+        .menu-right span {
+            font-size: 16px;
+            font-weight: bold; /* "Merhaba, <kullanıcı adı>" yazısını kalın yaptık */
+            color: #333;
         }
         .main-content {
-            padding: 60px 10px 10px; /* Üst menü için boşluk */
             display: flex;
-            flex-direction: column;
             gap: 20px;
+            flex: 1;
         }
-        .middle-panel {
+        .left-panel, .right-panel {
+            flex: 1;
             background-color: #ffffff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
         }
-        .left-panel, .right-panel {
-            position: fixed;
-            top: 60px; /* Üst menü yüksekliği */
-            bottom: 0;
-            width: 70%; /* Mobil için genişlik */
+        .middle-panel {
+            flex: 2;
             background-color: #ffffff;
             padding: 20px;
-            border-radius: 0 0 8px 0;
+            border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            transition: transform 0.3s ease;
-            transform: translateX(-100%); /* Varsayılan olarak gizli */
-        }
-        .right-panel {
-            left: auto;
-            right: 0;
-            border-radius: 0 0 0 8px;
-            transform: translateX(100%); /* Varsayılan olarak gizli */
-        }
-        .left-panel.active, .right-panel.active {
-            transform: translateX(0); /* Açıldığında görünür */
         }
         .left-panel img, .right-panel img {
             width: 40px;
@@ -133,17 +118,17 @@
             font-weight: bold;
         }
         .left-panel .balance {
-            font-size: 24px; /* Mobil için küçülttük */
+            font-size: 36px;
             font-weight: bold;
             color: #000;
         }
         .left-panel .balance small {
-            font-size: 12px; /* Mobil için küçülttük */
+            font-size: 14px; /* "Bakiye:" ve "₺" karakterini küçük yaptık */
             font-weight: normal;
             margin-right: 5px;
         }
         .left-panel .transaction-title {
-            font-size: 18px; /* Mobil için küçülttük */
+            font-size: 20px;
             font-weight: bold;
             color: #333;
         }
@@ -200,22 +185,22 @@
             margin-top: 2px; /* Meblağ ile saat arasında az boşluk */
         }
         .middle-panel h2 {
-            font-size: 24px; /* Mobil için küçülttük */
+            font-size: 28px;
             font-weight: bold;
             color: #333;
             margin-bottom: 15px;
         }
         .middle-panel p {
-            font-size: 12px; /* Mobil için küçülttük */
+            font-size: 14px;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .middle-panel .input-group {
             margin-bottom: 15px;
         }
         .middle-panel .input-group input {
             width: 100%;
-            padding: 10px; /* Mobil için küçülttük */
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
@@ -236,15 +221,15 @@
         .middle-panel .input-group .error-message {
             color: #ff0000;
             font-size: 12px;
-            margin-top: -8px; /* Mobil için küçülttük */
-            margin-bottom: 8px; /* Mobil için küçülttük */
+            margin-top: -10px;
+            margin-bottom: 10px;
             display: none;
         }
         .middle-panel .amount-input, .middle-panel .iban-input {
             position: relative;
         }
         .middle-panel .amount-input input, .middle-panel .iban-input input {
-            padding-right: 60px; /* Mobil için küçülttük */
+            padding-right: 80px; /* Para ve IBAN formatı için sağ boşluk */
             text-align: left; /* Imlecin düz devam etmesi için */
         }
         .middle-panel .amount-input small {
@@ -252,7 +237,7 @@
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 10px; /* Mobil için küçülttük */
+            font-size: 12px;
             color: #999;
             font-weight: bold;
             text-decoration: underline;
@@ -263,27 +248,26 @@
         .middle-panel .description-input small {
             position: absolute;
             right: 10px;
-            top: 8px; /* Mobil için küçülttük */
-            font-size: 10px; /* Mobil için küçülttük */
+            top: 10px;
+            font-size: 12px;
             color: #666;
         }
         .middle-panel button {
             background-color: #007bff;
             color: white;
-            padding: 10px 20px; /* Mobil için küçülttük */
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
-            font-size: 14px; /* Mobil için küçülttük */
+            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            width: 100%; /* Mobil için tam genişlik */
         }
         .middle-panel button:hover {
             background-color: #0056b3;
         }
         .error-message {
             color: #ff0000;
-            font-size: 14px; /* Mobil için küçülttük */
+            font-size: 16px;
             font-weight: bold;
             margin-top: 15px;
             padding: 15px 20px;
@@ -305,88 +289,122 @@
                 transform: translateY(0);
             }
         }
+        .right-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .right-panel li {
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: 40px 1fr; /* İki sütun: ikon (sabit genişlik), metin (esnek genişlik) */
+            align-items: center;
+            gap: 10px; /* İkon ve metin arasında boşluk */
+        }
+        .right-panel .transaction-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .right-panel .transaction-icon img {
+            width: 20px;
+            height: 20px; /* SVG’yi tam sığdır */
+            object-fit: contain; /* SVG’nin tam sığmasını sağla */
+        }
+        .right-panel .menu-text {
+            flex: 1;
+        }
+        .right-panel li small {
+            display: block;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        .right-panel li:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 100%;
+            height: 1px;
+            background-color: #ddd;
+            opacity: 0.5;
+        }
+        .right-panel li a {
+            color: #333;
+            text-decoration: none;
+        }
+        .right-panel li a:hover {
+            color: #007bff;
+        }
 
-        /* Masaüstü Görünüm (768px ve üzeri) */
-        @media (min-width: 768px) {
+        /* Mobil Görünüm için Açılır/Kapanır Menü */
+        @media (max-width: 768px) {
             .panel-container {
-                padding: 20px;
+                padding: 10px;
             }
             .sticky-menu {
-                position: sticky;
-                top: 0;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+            .menu-left, .menu-center, .menu-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .menu-center {
+                margin: 10px 0;
+            }
+            .main-content {
+                flex-direction: column;
+            }
+            .middle-panel {
+                width: 100%;
+                order: 2; /* Orta menü ortada kalsın */
+            }
+            .left-panel, .right-panel {
+                width: 100%;
+                display: none; /* Varsayılan olarak gizli */
+                position: fixed;
+                top: 60px; /* Üst menüden sonra başlasın */
+                bottom: 0;
+                z-index: 1001;
+                background-color: #ffffff;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease;
+                transform: translateX(-100%); /* Sol menü soldan girsin */
+            }
+            .right-panel {
+                transform: translateX(100%); /* Sağ menü sağdan girsin */
                 left: auto;
-                right: auto;
-                padding: 10px 20px;
-                border-radius: 8px;
+                right: 0;
+            }
+            .left-panel.active, .right-panel.active {
+                display: block;
+                transform: translateX(0); /* Açıldığında tam göster */
+            }
+            .menu-toggle {
+                display: block;
+                font-size: 24px;
+                cursor: pointer;
+                padding: 10px;
+                background: none;
+                border: none;
+                color: #333;
             }
             .menu-left, .menu-right {
                 display: flex;
                 align-items: center;
+                justify-content: space-between;
+                width: 100%;
             }
-            .menu-toggle, .user-toggle {
-                display: none; /* Masaüstünde hamburger menü gizli */
+            .menu-toggle.left {
+                order: -1; /* Sol menü butonu sola */
             }
-            .main-content {
-                padding: 0;
-                flex-direction: row;
-            }
-            .middle-panel {
-                flex: 2;
-            }
-            .left-panel, .right-panel {
-                flex: 1;
-                position: static;
-                width: auto;
-                display: block;
-                top: auto;
-                bottom: auto;
-                transform: none;
-                box-shadow: none;
-            }
-            .left-panel {
-                border-radius: 8px 0 0 8px;
-            }
-            .right-panel {
-                border-radius: 0 8px 8px 0;
-            }
-            .menu-center a {
-                font-size: 16px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .left-panel .balance {
-                font-size: 36px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .left-panel .balance small {
-                font-size: 14px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .left-panel .transaction-title {
-                font-size: 20px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .middle-panel h2 {
-                font-size: 28px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .middle-panel p {
-                font-size: 14px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .middle-panel .input-group input {
-                padding: 12px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .middle-panel .amount-input small, .middle-panel .description-input small {
-                font-size: 12px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .middle-panel button {
-                padding: 12px 30px; /* Masaüstünde normal boyuta geri dön */
-                font-size: 16px; /* Masaüstünde normal boyuta geri dön */
-                width: auto; /* Masaüstünde tam genişlik değil */
-            }
-            .error-message {
-                font-size: 16px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .middle-panel .input-group .error-message {
-                margin-top: -10px; /* Masaüstünde normal boyuta geri dön */
-                margin-bottom: 10px; /* Masaüstünde normal boyuta geri dön */
-            }
-            .middle-panel .description-input small {
-                top: 10px; /* Masaüstünde normal boyuta geri dön */
+            .menu-toggle.right {
+                order: 1; /* Sağ menü butonu sağa */
             }
         }
     </style>
@@ -395,7 +413,7 @@
     <div class="panel-container">
         <div class="sticky-menu">
             <div class="menu-left">
-                <button class="menu-toggle" onclick="toggleMenu('left')"><img src="menu.svg" alt="Menu" /></button>
+                <button class="menu-toggle left" onclick="toggleMenu('left')">☰</button>
                 <img src="logo.png" alt="Paypara Logo" />
             </div>
             <div class="menu-center">
@@ -405,13 +423,15 @@
                 <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
             </div>
             <div class="menu-right">
-                <button class="user-toggle" onclick="toggleMenu('right')"><img src="user.svg" alt="Kullanıcı Profili" /></button>
+                <img src="user.svg" alt="Kullanıcı Profili" /> <!-- user.png yerine user.svg kullanıyoruz -->
+                <span>Merhaba, <span id="userName"></span></span>
+                <button class="menu-toggle right" onclick="toggleMenu('right')">☰</button>
             </div>
         </div>
         <div class="main-content">
             <div class="left-panel">
                 <div class="user-info">
-                    <img src="user.svg" alt="Kullanıcı Profili" />
+                    <img src="user.svg" alt="Kullanıcı Profili" /> <!-- user.png yerine user.svg kullanıyoruz -->
                     <span id="welcomeUser"></span>
                 </div>
                 <div class="user-id">Benzersiz Kullanıcı No: <span>148280536456</span></div>
@@ -547,11 +567,22 @@
             localStorage.removeItem('currentUser');
         }
 
-        // Menü toggle fonksiyonu
-        function toggleMenu(side) {
-            const panel = document.querySelector(`.${side}-panel`);
-            panel.classList.toggle('active');
+        // Dropdown’ı tıklama ile aç/kapat (şimdi kullanılmıyor, ama koruduk)
+        let dropdownOpen = false;
+        function toggleDropdown() {
+            dropdownOpen = !dropdownOpen;
+            document.querySelector('.dropdown').classList.toggle('active', dropdownOpen);
         }
+
+        // Dışarı tıklandığında dropdown’ı kapat
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            const dropbtn = document.querySelector('.dropbtn');
+            if (!dropdown.contains(event.target) && event.target !== dropbtn) {
+                dropdownOpen = false;
+                document.querySelector('.dropdown').classList.remove('active');
+            }
+        });
 
         // Tarih işlemleri
         const today = new Date('2025-02-27'); // Sabit tarih
@@ -663,6 +694,12 @@
         window.addEventListener('load', function() {
             showSection('send');
         });
+
+        // Mobil menü toggle fonksiyonu
+        function toggleMenu(side) {
+            const panel = document.querySelector(`.${side}-panel`);
+            panel.classList.toggle('active');
+        }
 
         // Event listener’ları kur
         function setupEventListeners() {
