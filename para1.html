@@ -163,31 +163,35 @@
             height: 15px;
             object-fit: contain; /* SVG’nin yuvarlağa tam sığmasını sağla */
         }
+        .left-panel .transaction-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
         .left-panel .transaction-name {
-            font-size: 10px; /* Yazıları daha da küçülttük (12px’den 10px’e) */
+            font-size: 14px; /* Yazıları 14px’e geri aldık (daha okunabilir) */
             font-weight: 600;
             color: #333;
-            flex: 1;
             white-space: nowrap; /* Tek satırda kal */
             overflow: hidden;
             text-overflow: ellipsis; /* Taşarsa ... ile kes */
         }
         .left-panel .transaction-amount {
-            font-size: 10px; /* Yazıları daha da küçülttük (12px’den 10px’e) */
+            font-size: 14px; /* Yazıları 14px’e geri aldık (daha okunabilir) */
             font-weight: 600;
             color: #007bff;
-            margin-right: 10px;
             text-align: right; /* Miktarı sağa dayalı yaptık */
-            flex: 0 0 120px; /* Sabit genişlik, sağa dayalı için */
+            margin-right: 10px;
             white-space: nowrap; /* Tek satırda kal */
             overflow: hidden;
             text-overflow: ellipsis; /* Taşarsa ... ile kes */
         }
         .left-panel .transaction-time {
-            font-size: 8px; /* Yazıları daha da küçülttük (10px’den 8px’e) */
+            font-size: 12px; /* Yazıları 12px’e ayarladık (daha okunabilir) */
             color: #666;
-            margin-left: auto; /* Miktarın altına yerleştirmek için sağa kaydır */
             display: block; /* Miktarın altına geç */
+            margin-left: auto; /* Miktarın altına hizala */
         }
         .middle-panel h2 {
             font-size: 28px;
@@ -304,7 +308,7 @@
             font-size: 16px;
             color: #333;
             position: relative;
-            padding-left: 40px;
+            padding-left: 40px; /* İkonlar için sol boşluk */
         }
         .right-panel li::before {
             content: '';
@@ -415,42 +419,42 @@
                     <div class="transaction-icon">
                         <img src="ziraat.svg" alt="Ziraat Bankası" />
                     </div>
-                    <div>
+                    <div class="transaction-content">
                         <div class="transaction-name">Lider Bahadır</div>
                         <div class="transaction-amount">₺7.700,000</div>
-                        <div class="transaction-time">03:12</div>
                     </div>
+                    <div class="transaction-time">03:12</div>
                 </div>
                 <div class="transaction-date">Dün, <span id="yesterdayDate"></span></div>
                 <div class="transaction-item">
                     <div class="transaction-icon">
                         <img src="isbank.svg" alt="İş Bankası" />
                     </div>
-                    <div>
+                    <div class="transaction-content">
                         <div class="transaction-name">Esra Gündoğdu</div>
                         <div class="transaction-amount">₺2.000,000</div>
-                        <div class="transaction-time">21:22</div>
                     </div>
+                    <div class="transaction-time">21:22</div>
                 </div>
                 <div class="transaction-item">
                     <div class="transaction-icon">
                         <img src="isbank.svg" alt="İş Bankası" />
                     </div>
-                    <div>
+                    <div class="transaction-content">
                         <div class="transaction-name">Ahmet Salih Erdinç</div>
                         <div class="transaction-amount">₺5.500,000</div>
-                        <div class="transaction-time">21:13</div>
                     </div>
+                    <div class="transaction-time">21:13</div>
                 </div>
                 <div class="transaction-item">
                     <div class="transaction-icon">
                         <img src="qnb.svg" alt="QNB Finansbank" />
                     </div>
-                    <div>
+                    <div class="transaction-content">
                         <div class="transaction-name">Yasin Tuna</div>
                         <div class="transaction-amount">₺4.250,000</div>
-                        <div class="transaction-time">20:42</div>
                     </div>
+                    <div class="transaction-time">20:42</div>
                 </div>
             </div>
             <div class="middle-panel" id="middleContent">
