@@ -69,7 +69,6 @@
         .menu-right img {
             width: 30px;
             height: 30px;
-            margin-right: 5px;
         }
         .menu-right span {
             font-size: 16px;
@@ -389,14 +388,14 @@
                 <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
             </div>
             <div class="menu-right">
-                <img src="user.svg" alt="Kullanıcı Profili" /> <!-- user.png yerine user.svg kullanıyoruz -->
+                <img src="user.svg" alt="Kullanıcı Profili" />
                 <span>Merhaba, <span id="userName"></span></span>
             </div>
         </div>
         <div class="main-content">
             <div class="left-panel">
                 <div class="user-info">
-                    <img src="user.svg" alt="Kullanıcı Profili" /> <!-- user.png yerine user.svg kullanıyoruz -->
+                    <img src="user.svg" alt="Kullanıcı Profili" />
                     <span id="welcomeUser"></span>
                 </div>
                 <div class="user-id">Benzersiz Kullanıcı No: <span>148280536456</span></div>
@@ -795,7 +794,6 @@
 
         // Bakiye ile tutar kutusunu doldurma (üstüne tıklandığında)
         function fillAmountWithBalance() {
-            // Sol paneldeki bakiyeyi kontrol et
             const balanceElement = document.querySelector('.left-panel .balance');
             if (balanceElement) {
                 const balanceText = balanceElement.textContent.trim().replace('Bakiye:', '').replace('₺', '').replace(/[.]/g, '').replace(',', '.');
