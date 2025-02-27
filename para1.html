@@ -191,15 +191,16 @@
         }
         .middle-panel p {
             font-size: 14px;
-            color: #666;
+            color: #333;
             margin-bottom: 20px;
         }
         .middle-panel .input-group {
             margin-bottom: 15px;
+            position: relative;
         }
         .middle-panel .input-group input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 12px 12px 30px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
@@ -211,7 +212,7 @@
             outline: none;
         }
         .middle-panel .input-group input.placeholder {
-            color: #999;
+            color: #333;
         }
         .middle-panel .input-group .error {
             border-color: #ff0000;
@@ -223,6 +224,16 @@
             margin-top: -10px;
             margin-bottom: 10px;
             display: none;
+        }
+        .middle-panel .iban-input::before {
+            content: "TR";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #333;
+            pointer-events: none;
         }
         .middle-panel .amount-input, .middle-panel .iban-input {
             position: relative;
@@ -241,15 +252,6 @@
             font-weight: bold;
             text-decoration: underline;
             cursor: pointer;
-        }
-        .middle-panel .iban-input small {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            color: #999;
-            font-weight: bold;
         }
         .middle-panel .description-input {
             position: relative;
@@ -458,11 +460,10 @@
                 <p>Herhangi bir bankanın IBAN’ına para transferi yapabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
                 <div class="input-group">
                     <input type="text" id="sendName" placeholder="İsim Soyisim" required>
-                    <div id="nameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                    <div id="nameError" class="error-message">Lütfen en az iki kelime girin.</div>
                 </div>
                 <div class="input-group iban-input">
                     <input type="text" id="sendIban" placeholder="IBAN" required>
-                    <small>TR </small>
                 </div>
                 <div class="input-group amount-input">
                     <input type="text" id="sendAmount" placeholder="0,00 ₺" required>
@@ -570,11 +571,10 @@
                     <p>Herhangi bir bankanın IBAN’ına para transferi yapabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="sendName" placeholder="İsim Soyisim" required>
-                        <div id="nameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                        <div id="nameError" class="error-message">Lütfen en az iki kelime girin.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="sendIban" placeholder="IBAN" required>
-                        <small>TR </small>
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="sendAmount" placeholder="0,00 ₺" required>
@@ -592,11 +592,10 @@
                     <p>Herhangi bir bankanın IBAN’ından para alabilirsiniz. Ayrıca, diğer para transferleri için yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="receiveName" placeholder="İsim Soyisim" required>
-                        <div id="receiveNameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                        <div id="receiveNameError" class="error-message">Lütfen en az iki kelime girin.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="receiveIban" placeholder="IBAN" required>
-                        <small>TR </small>
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="receiveAmount" placeholder="0,00 ₺" required>
@@ -614,11 +613,10 @@
                     <p>Yabancı bankaların SWIFT kodlarıyla uluslararası para transferi yapabilirsiniz. Yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="intlName" placeholder="İsim Soyisim" required>
-                        <div id="intlNameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                        <div id="intlNameError" class="error-message">Lütfen en az iki kelime girin.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="intlIban" placeholder="IBAN" required>
-                        <small>TR </small>
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="intlAmount" placeholder="0,00 ₺" required>
@@ -636,11 +634,10 @@
                     <p>Bitcoin, Ethereum gibi kripto paralarla transfer yapabilirsiniz. Yukarıdaki menüyü incele.</p>
                     <div class="input-group">
                         <input type="text" id="cryptoName" placeholder="İsim Soyisim" required>
-                        <div id="cryptoNameError" class="error-message">Lütfen isminizi doğru yazdığınızdan emin olun.</div>
+                        <div id="cryptoNameError" class="error-message">Lütfen en az iki kelime girin.</div>
                     </div>
                     <div class="input-group iban-input">
                         <input type="text" id="cryptoIban" placeholder="IBAN" required>
-                        <small>TR </small>
                     </div>
                     <div class="input-group amount-input">
                         <input type="text" id="cryptoAmount" placeholder="0,00 ₺" required>
@@ -668,11 +665,13 @@
                 const errorId = `${id}Error`;
                 if (input) {
                     input.addEventListener('input', function() {
-                        const name = this.value.trim();
-                        const words = name.split(/\s+/).filter(word => word.length > 0);
+                        let value = this.value.trim();
+                        value = value.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+                        this.value = value;
+                        const words = value.split(/\s+/).filter(word => word.length > 0);
                         const errorMessage = document.getElementById(errorId);
 
-                        if (words.length < 2) {
+                        if (words.length < 2 || words.some(word => word.length === 0)) {
                             this.classList.add('error');
                             errorMessage.style.display = 'block';
                         } else {
@@ -747,35 +746,54 @@
 
             ['sendIban', 'receiveIban', 'intlIban', 'cryptoIban'].forEach(id => {
                 const input = document.getElementById(id);
-                const small = input.nextElementSibling;
-                if (input && small && small.tagName === 'SMALL' && small.textContent.trim() === 'TR ') {
-                    input.addEventListener('focus', function() {
-                        if (this.value === '') {
-                            this.value = 'TR ';
-                        }
-                    });
+                if (input) {
                     input.addEventListener('input', function(e) {
                         let value = this.value.replace(/[^0-9]/g, '');
-                        if (value === '') {
-                            this.value = 'TR ';
-                            return;
+                        if (value.length > 0) {
+                            let masked = 'TR';
+                            for (let i = 0; i < value.length; i++) {
+                                masked += (i > 1 && i % 4 === 2 && i < value.length - 1) ? ' ' + value[i] : value[i];
+                                if (i > 1 && i % 4 === 1 && i < value.length - 1) masked += ' **** ';
+                            }
+                            this.value = masked;
+                        } else {
+                            this.value = '';
                         }
 
-                        this.value = 'TR ' + value;
-
                         setTimeout(() => {
-                            const cursorPosition = 3;
-                            this.selectionStart = this.selectionEnd = cursorPosition + value.length;
+                            this.selectionStart = this.selectionEnd = this.value.length;
                         }, 0);
 
                         if (value.length > 16) {
-                            this.value = 'TR ' + value.slice(0, 16);
+                            this.value = this.value.slice(0, 24); // "TR** **** **** **** **" formatı için maksimum uzunluk
+                        }
+                    });
+
+                    input.addEventListener('focus', function() {
+                        if (this.value === '') {
+                            this.value = '';
                         }
                     });
                     input.addEventListener('blur', function() {
-                        if (!this.value || this.value === 'TR ') {
-                            this.value = 'TR ';
+                        if (!this.value) {
+                            this.value = '';
                         }
+                    });
+
+                    input.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        let pastedText = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+                        if (pastedText.length > 16) pastedText = pastedText.slice(0, 16);
+                        let masked = 'TR';
+                        for (let i = 0; i < pastedText.length; i++) {
+                            masked += (i > 1 && i % 4 === 2 && i < pastedText.length - 1) ? ' ' + pastedText[i] : pastedText[i];
+                            if (i > 1 && i % 4 === 1 && i < pastedText.length - 1) masked += ' **** ';
+                        }
+                        this.value = masked;
+
+                        setTimeout(() => {
+                            this.selectionStart = this.selectionEnd = this.value.length;
+                        }, 0);
                     });
                 }
             });
@@ -795,7 +813,7 @@
 
         function sendMoney() {
             const name = document.getElementById('sendName').value.trim();
-            const iban = document.getElementById('sendIban').value.trim().replace('TR ', '');
+            const iban = document.getElementById('sendIban').value.trim().replace(/[^0-9]/g, '');
             const amount = document.getElementById('sendAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
             const words = name.split(/\s+/).filter(word => word.length > 0);
 
@@ -825,7 +843,7 @@
 
         function receiveMoney() {
             const name = document.getElementById('receiveName').value.trim();
-            const iban = document.getElementById('receiveIban').value.trim().replace('TR ', '');
+            const iban = document.getElementById('receiveIban').value.trim().replace(/[^0-9]/g, '');
             const amount = document.getElementById('receiveAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
             const words = name.split(/\s+/).filter(word => word.length > 0);
 
@@ -847,7 +865,7 @@
 
         function sendInternationalMoney() {
             const name = document.getElementById('intlName').value.trim();
-            const iban = document.getElementById('intlIban').value.trim().replace('TR ', '');
+            const iban = document.getElementById('intlIban').value.trim().replace(/[^0-9]/g, '');
             const amount = document.getElementById('intlAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
             const words = name.split(/\s+/).filter(word => word.length > 0);
 
@@ -877,7 +895,7 @@
 
         function sendCryptoMoney() {
             const name = document.getElementById('cryptoName').value.trim();
-            const iban = document.getElementById('cryptoIban').value.trim().replace('TR ', '');
+            const iban = document.getElementById('cryptoIban').value.trim().replace(/[^0-9]/g, '');
             const amount = document.getElementById('cryptoAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
             const words = name.split(/\s+/).filter(word => word.length > 0);
 
