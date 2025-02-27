@@ -373,9 +373,9 @@
 <body>
     <div class="panel-container">
         <div class="sticky-menu">
-            <button class="menu-toggle" onclick="toggleMenu('left')"><img src="menu.svg" alt="Menu" /></button>
+            <button class="menu-toggle"><img src="menu.svg" alt="Menu" /></button>
             <img src="logo.png" alt="Paypara Logo" class="logo" />
-            <button class="user-toggle" onclick="toggleMenu('right')"><img src="user.svg" alt="Kullanıcı Profili" /></button>
+            <button class="user-toggle"><img src="user.svg" alt="Kullanıcı Profili" /></button>
         </div>
         <div class="main-content">
             <div class="left-panel">
@@ -522,8 +522,14 @@
             localStorage.removeItem('currentUser');
         }
 
-        // Menü toggle fonksiyonu (sadece bir menü açık kalsın, önceki gibi çalışsın)
+        // Menü toggle fonksiyonu (sadece bir menü açık kalsın)
         let activeMenu = null;
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            toggleMenu('left');
+        });
+        document.querySelector('.user-toggle').addEventListener('click', function() {
+            toggleMenu('right');
+        });
         function toggleMenu(side) {
             const panel = document.querySelector(`.${side}-panel`);
             const otherPanel = side === 'left' ? document.querySelector('.right-panel') : document.querySelector('.left-panel');
@@ -545,11 +551,10 @@
             activeMenu = panel.classList.contains('active') ? side : null;
 
             // Menü dışında tıklama ile kapatma event listener’ını ekle
-            document.removeEventListener('click', closeMenuOnOutsideClick);
             document.addEventListener('click', closeMenuOnOutsideClick);
         }
 
-        // Menü dışında tıklama ile kapatma (önceki gibi çalışsın, sadece boşluğa tıklandığında kapansın)
+        // Menü dışında tıklama ile kapatma (sadece boşluğa tıklandığında kapansın)
         function closeMenuOnOutsideClick(event) {
             const leftPanel = document.querySelector('.left-panel');
             const rightPanel = document.querySelector('.right-panel');
