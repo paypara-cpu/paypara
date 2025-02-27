@@ -746,49 +746,47 @@
             });
 
             ['sendIban', 'receiveIban', 'intlIban', 'cryptoIban'].forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('input', function(e) {
-                        let value = this.value.replace(/[^0-9]/g, '');
-                        if (value.length > 16) value = value.slice(0, 16);
-                        let formatted = '';
-                        for (let i = 0; i < value.length; i++) {
-                            if (i === 0) formatted = 'TR';
-                            if (i === 2 || i === 6 || i === 10) formatted += ' ';
-                            formatted += value[i];
-                        }
-                        this.value = formatted;
-                        setTimeout(() => this.selectionStart = this.selectionEnd = this.value.length, 0);
-                    });
+    const input = document.getElementById(id);
+    if (input) {
+        input.addEventListener('input', function(e) {
+            let value = this.value.replace(/[^0-9]/g, ''); // Sadece sayıları al
+            if (value.length > 24) value = value.slice(0, 24); // TR hariç 24 karakter (toplam IBAN 26)
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i === 2 || i === 6 || i === 10 || i === 14 || i === 18) formatted += ' ';
+                formatted += value[i];
+            }
+            this.value = formatted; // CSS "TR"yi ekliyor, burada eklemiyoruz
+            setTimeout(() => this.selectionStart = this.selectionEnd = this.value.length, 0);
+        });
 
-                    input.addEventListener('focus', function() {
-                        if (this.value === this.placeholder) {
-                            this.value = '';
-                            this.classList.remove('placeholder');
-                        }
-                    });
-                    input.addEventListener('blur', function() {
-                        if (!this.value) {
-                            this.value = '';
-                            this.classList.add('placeholder');
-                        }
-                    });
+        input.addEventListener('focus', function() {
+            if (this.value === this.placeholder) {
+                this.value = '';
+                this.classList.remove('placeholder');
+            }
+        });
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.value = '';
+                this.classList.add('placeholder');
+            }
+        });
 
-                    input.addEventListener('paste', function(e) {
-                        e.preventDefault();
-                        let pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
-                        if (pasted.length > 16) pasted = pasted.slice(0, 16);
-                        let formatted = '';
-                        for (let i = 0; i < pasted.length; i++) {
-                            if (i === 0) formatted = 'TR';
-                            if (i === 2 || i === 6 || i === 10) formatted += ' ';
-                            formatted += pasted[i];
-                        }
-                        this.value = formatted;
-                        setTimeout(() => this.selectionStart = this.selectionEnd = this.value.length, 0);
-                    });
-                }
-            });
+        input.addEventListener('paste', function(e) {
+            e.preventDefault();
+            let pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '');
+            if (pasted.length > 24) pasted = pasted.slice(0, 24);
+            let formatted = '';
+            for (let i = 0; i < pasted.length; i++) {
+                if (i === 2 || i === 6 || i === 10 || i === 14 || i === 18) formatted += ' ';
+                formatted += pasted[i];
+            }
+            this.value = formatted;
+            setTimeout(() => this.selectionStart = this.selectionEnd = this.value.length, 0);
+        });
+    }
+});
         }
 
         function fillAmountWithBalance() {
@@ -804,34 +802,34 @@
         }
 
         function sendMoney() {
-            const name = document.getElementById('sendName').value.trim();
-            const iban = document.getElementById('sendIban').value.trim().replace(/[^0-9]/g, '');
-            const amount = document.getElementById('sendAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
-            const words = name.split(/\s+/).filter(word => word.length > 0);
+    const name = document.getElementById('sendName').value.trim();
+    const iban = document.getElementById('sendIban').value.trim().replace(/[^0-9]/g, '');
+    const amount = document.getElementById('sendAmount').value.replace(/[^0-9,]/g, '').replace(',', '.');
+    const words = name.split(/\s+/).filter(word => word.length > 0);
 
-            if (words.length < 2) {
-                document.getElementById('sendName').classList.add('error');
-                document.getElementById('nameError').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('sendName').classList.remove('error');
-                document.getElementById('nameError').style.display = 'none';
-            }
+    if (words.length < 2) {
+        document.getElementById('sendName').classList.add('error');
+        document.getElementById('nameError').style.display = 'block';
+        return;
+    } else {
+        document.getElementById('sendName').classList.remove('error');
+        document.getElementById('nameError').style.display = 'none';
+    }
 
-            if (name && amount && iban.length === 16) {
-                const balance = 1266358.00;
-                const parsedAmount = parseFloat(amount);
-                if (parsedAmount > balance) {
-                    document.getElementById('middleContent').innerHTML += `
-                        <div class="error-message">Transaction Failed<br>You don't have a sufficient balance in your account to complete this transaction.</div>
-                    `;
-                } else {
-                    alert(`Para ${name}’e, IBAN: ${iban}, ${amount.replace('.', ',')} ₺ gönderildi!`);
-                }
-            } else {
-                alert('Lütfen tüm zorunlu alanları doldurun ve IBAN 16 hane olmalı.');
-            }
+    if (name && amount && iban.length === 24) { // 16 yerine 24
+        const balance = 1266358.00;
+        const parsedAmount = parseFloat(amount);
+        if (parsedAmount > balance) {
+            document.getElementById('middleContent').innerHTML += `
+                <div class="error-message">Transaction Failed<br>You don't have a sufficient balance in your account to complete this transaction.</div>
+            `;
+        } else {
+            alert(`Para ${name}’e, IBAN: TR${iban}, ${amount.replace('.', ',')} ₺ gönderildi!`);
         }
+    } else {
+        alert('Lütfen tüm zorunlu alanları doldurun ve IBAN 24 hane olmalı.');
+    }
+}
 
         function receiveMoney() {
             const name = document.getElementById('receiveName').value.trim();
