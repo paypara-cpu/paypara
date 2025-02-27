@@ -38,7 +38,7 @@
             align-items: center;
         }
         .menu-left img {
-            width: 90px; /* Logoyu çok az daha büyüttük (önceki 80px’den) */
+            width: 90px; /* Logoyu çok az daha büyütülmüş hali */
             height: auto;
             margin-right: 20px;
         }
@@ -70,6 +70,12 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
+            margin-right: 5px;
+        }
+        .menu-right span {
+            font-size: 16px;
+            font-weight: bold; /* "Merhaba, <kullanıcı adı>" yazısını kalın yaptık */
+            color: #333;
         }
         .main-content {
             display: flex;
@@ -113,12 +119,12 @@
             font-weight: bold;
         }
         .left-panel .balance {
-            font-size: 24px; /* Bakiyeyi küçülttük (önceki 36px’den) */
+            font-size: 36px; /* "1.266.358,00" tutarını aynı boyutta bıraktık */
             font-weight: bold;
             color: #000;
         }
         .left-panel .balance small {
-            font-size: 18px; /* ₺ karakterini biraz büyüttük (önceki 14px’den) */
+            font-size: 24px; /* ₺ karakterini "1.266.358,00" boyutuna getirdik */
             font-weight: normal;
             margin-right: 5px;
         }
@@ -156,16 +162,18 @@
             object-fit: contain;
         }
         .left-panel .transaction-name {
-            font-size: 16px;
+            font-size: 14px; /* Yazıları küçültüp kaba görünümü azalttık */
             font-weight: 600;
             color: #333;
             flex: 1;
         }
         .left-panel .transaction-amount {
-            font-size: 16px;
+            font-size: 14px; /* Yazıları küçültüp kaba görünümü azalttık */
             font-weight: 600;
             color: #007bff;
             margin-right: 10px;
+            text-align: right; /* Miktarı sağa dayalı yaptık */
+            flex: 0 0 120px; /* Sabit genişlik, sağa dayalı için */
         }
         .left-panel .transaction-time {
             font-size: 12px;
@@ -217,7 +225,7 @@
         }
         .middle-panel .amount-input input {
             padding-right: 80px; /* Para formatı için sağ boşluk */
-            text-align: left; /* Imlecin ₺’nin arkasına gitmesini engelle */
+            text-align: left; /* Imlecin düz devam etmesi için */
         }
         .middle-panel .amount-input small {
             position: absolute;
@@ -378,6 +386,7 @@
             </div>
             <div class="menu-right">
                 <img src="user.png" alt="Kullanıcı Profili" />
+                <span>Merhaba, <span id="userName"></span></span>
             </div>
         </div>
         <div class="main-content">
@@ -681,27 +690,27 @@
                 }
             });
 
-            // Para formatı için input
+            // Para formatı için input (₺ her zaman kalacak, harfler engellenecek)
             ['sendAmount', 'receiveAmount', 'intlAmount', 'cryptoAmount'].forEach(id => {
                 const input = document.getElementById(id);
                 if (input) {
                     input.addEventListener('input', function(e) {
-                        let value = this.value.replace(/[^0-9,]/g, ''); // Sadece sayı ve virgül kabul et
+                        let value = this.value.replace(/[^0-9]/g, ''); // Sadece sayılar kabul et, harfleri engelle
                         if (value === '') {
                             this.value = '0,00 ₺';
                             return;
                         }
 
                         // Virgülden önceki kısmı 3’erli gruplar halinde noktalı yap
-                        value = value.replace(',', '.'); // Virgülü noktaya çevir
-                        let parts = value.split('.');
-                        let integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // 3 haneli gruplar
-                        let decimalPart = parts[1] ? parts[1].slice(0, 2) : '00'; // 2 basamaklı kuruş
+                        value = value.padEnd(3, '0'); // En az 3 hane için 0 ekle
+                        let integerPart = value.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // 3 haneli gruplar
+                        let decimalPart = value.slice(-2); // 2 basamaklı kuruş
                         this.value = `${integerPart},${decimalPart} ₺`;
 
-                        // Imleci sola hizala ve ₺’nin önüne yerleştir
+                        // Imleci her zaman sayının soluna yerleştir, ₺ sabit kalsın
                         setTimeout(() => {
-                            this.selectionStart = this.selectionEnd = this.value.indexOf('₺') + 1;
+                            const cursorPosition = this.value.indexOf('₺') + 1;
+                            this.selectionStart = this.selectionEnd = cursorPosition;
                         }, 0);
 
                         // Maksimum 12 hane (milyonlar) sınırla
@@ -710,17 +719,15 @@
                         }
                     });
 
-                    // Placeholder temizleme
+                    // Placeholder temizleme ve ₺’yi sabit tut
                     input.addEventListener('focus', function() {
                         if (this.value === '0,00 ₺') {
                             this.value = '';
-                            this.classList.remove('placeholder');
                         }
                     });
                     input.addEventListener('blur', function() {
                         if (!this.value || this.value === '') {
                             this.value = '0,00 ₺';
-                            this.classList.add('placeholder');
                         }
                     });
                 }
