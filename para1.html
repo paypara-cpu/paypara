@@ -96,7 +96,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .left-panel img {
+        .left-panel img, .right-panel img {
             width: 40px;
             height: auto;
             vertical-align: middle;
@@ -166,8 +166,13 @@
         .left-panel .transaction-content {
             flex: 1;
             display: flex;
+            flex-direction: column;
+        }
+        .left-panel .transaction-line {
+            display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 5px; /* İsim ve miktar arasında boşluk */
         }
         .left-panel .transaction-name {
             font-size: 14px; /* Yazıları 14px’e geri aldık (daha okunabilir) */
@@ -182,7 +187,7 @@
             font-weight: 600;
             color: #007bff;
             text-align: right; /* Miktarı sağa dayalı yaptık */
-            margin-right: 10px;
+            margin-left: auto; /* Miktarı sağa hizala */
             white-space: nowrap; /* Tek satırda kal */
             overflow: hidden;
             text-overflow: ellipsis; /* Taşarsa ... ile kes */
@@ -190,8 +195,7 @@
         .left-panel .transaction-time {
             font-size: 12px; /* Yazıları 12px’e ayarladık (daha okunabilir) */
             color: #666;
-            display: block; /* Miktarın altına geç */
-            margin-top: 5px; /* Miktar ile aralık bırak */
+            text-align: right; /* Sağı hizala */
         }
         .middle-panel h2 {
             font-size: 28px;
@@ -309,6 +313,8 @@
             color: #333;
             position: relative;
             padding-left: 40px; /* İkonlar için sol boşluk */
+            display: flex;
+            align-items: center; /* Elementleri dikey hizala */
         }
         .right-panel li::before {
             content: '';
@@ -328,6 +334,9 @@
             width: 20px;
             height: 20px; /* SVG’yi yuvarlağa tam sığdır */
             object-fit: contain; /* SVG’nin yuvarlağa sığmasını sağla */
+        }
+        .right-panel li .menu-text {
+            flex: 1; /* Metni ikonların yanına hizala */
         }
         .right-panel li small {
             display: block;
@@ -401,18 +410,18 @@
                 <a href="javascript:void(0)" onclick="showSection('crypto')">Kripto Para Gönderme</a>
             </div>
             <div class="menu-right">
-                <img src="user.png" alt="Kullanıcı Profili" />
+                <img src="user.svg" alt="Kullanıcı Profili" /> <!-- user.png yerine user.svg kullanıyoruz -->
                 <span>Merhaba, <span id="userName"></span></span>
             </div>
         </div>
         <div class="main-content">
             <div class="left-panel">
                 <div class="user-info">
-                    <img src="user.png" alt="Kullanıcı Profili" />
+                    <img src="user.svg" alt="Kullanıcı Profili" /> <!-- user.png yerine user.svg kullanıyoruz -->
                     <span id="welcomeUser"></span>
                 </div>
                 <div class="user-id">Benzersiz Kullanıcı No: <span>148280536456</span></div>
-                <div class="balance"><small>Bakiye:</small> <br><small>₺</small>1.266.358,00</div></br>
+                <div class="balance"><small>Bakiye:</small> <small>₺</small>1.266.358,00</div>
                 <div class="transaction-title">Para Transferleri</div>
                 <div class="transaction-date">Bugün, <span id="currentDate"></span></div>
                 <div class="transaction-item">
@@ -420,10 +429,12 @@
                         <img src="ziraat.svg" alt="Ziraat Bankası" />
                     </div>
                     <div class="transaction-content">
-                        <div class="transaction-name">Lider Bahadır</div>
-                        <div class="transaction-amount">₺7.700,000</div>
+                        <div class="transaction-line">
+                            <div class="transaction-name">Lider Bahadır</div>
+                            <div class="transaction-amount">₺7.700,000</div>
+                        </div>
+                        <div class="transaction-time">03:12</div>
                     </div>
-                    <br><div class="transaction-time">03:12</div></br>
                 </div>
                 <div class="transaction-date">Dün, <span id="yesterdayDate"></span></div>
                 <div class="transaction-item">
@@ -431,30 +442,36 @@
                         <img src="isbank.svg" alt="İş Bankası" />
                     </div>
                     <div class="transaction-content">
-                        <div class="transaction-name">Esra Gündoğdu</div>
-                        <div class="transaction-amount">₺2.000,000</div>
+                        <div class="transaction-line">
+                            <div class="transaction-name">Esra Gündoğdu</div>
+                            <div class="transaction-amount">₺2.000,000</div>
+                        </div>
+                        <div class="transaction-time">21:22</div>
                     </div>
-                    <br><div class="transaction-time">21:22</div></br>
                 </div>
                 <div class="transaction-item">
                     <div class="transaction-icon">
                         <img src="isbank.svg" alt="İş Bankası" />
                     </div>
                     <div class="transaction-content">
-                        <div class="transaction-name">Ahmet Salih Erdinç</div>
-                        <div class="transaction-amount">₺5.500,000</div>
+                        <div class="transaction-line">
+                            <div class="transaction-name">Ahmet Salih Erdinç</div>
+                            <div class="transaction-amount">₺5.500,000</div>
+                        </div>
+                        <div class="transaction-time">21:13</div>
                     </div>
-                    <br><div class="transaction-time">21:13</div></br>
                 </div>
                 <div class="transaction-item">
                     <div class="transaction-icon">
                         <img src="qnb.svg" alt="QNB Finansbank" />
                     </div>
                     <div class="transaction-content">
-                        <div class="transaction-name">Yasin Tuna</div>
-                        <div class="transaction-amount">₺4.250,000</div>
+                        <div class="transaction-line">
+                            <div class="transaction-name">Yasin Tuna</div>
+                            <div class="transaction-amount">₺4.250,000</div>
+                        </div>
+                        <div class="transaction-time">20:42</div>
                     </div>
-                    <br><div class="transaction-time">20:42</div></br>
                 </div>
             </div>
             <div class="middle-panel" id="middleContent">
@@ -479,31 +496,31 @@
                 <ul>
                     <li>
                         <div class="transaction-icon"><img src="account.svg" alt="Hesap Detayları" /></div>
-                        <a href="panel.html?authenticated=true">Hesap Detayları</a> <small>(Hesap detaylarına göz at)</small>
+                        <div class="menu-text"><a href="panel.html?authenticated=true">Hesap Detayları</a> <small>(Hesap detaylarına göz at)</small></div>
                     </li>
                     <li>
                         <div class="transaction-icon"><img src="help.svg" alt="Yardım" /></div>
-                        Yardım <small>(Öğrenmek istediğin konuyla alakalı bilgi al)</small>
+                        <div class="menu-text">Yardım <small>(Öğrenmek istediğin konuyla alakalı bilgi al)</small></div>
                     </li>
                     <li>
                         <div class="transaction-icon"><img src="notify.svg" alt="Bildirimler" /></div>
-                        Bildirimler <small>(Hesap bildirimlerini kontrol et)</small>
+                        <div class="menu-text">Bildirimler <small>(Hesap bildirimlerini kontrol et)</small></div>
                     </li>
                     <li>
                         <div class="transaction-icon"><img src="transaction.svg" alt="Son İşlemler" /></div>
-                        Son İşlemler <small>(Son yapılan işlemleri görüntüle)</small>
+                        <div class="menu-text">Son İşlemler <small>(Son yapılan işlemleri görüntüle)</small></div>
                     </li>
                     <li>
                         <div class="transaction-icon"><img src="settings.svg" alt="Ayarlar" /></div>
-                        Ayarlar <small>(Kişisel bilgilerini güncelle)</small>
+                        <div class="menu-text">Ayarlar <small>(Kişisel bilgilerini güncelle)</small></div>
                     </li>
                     <li>
                         <div class="transaction-icon"><img src="support.svg" alt="Canlı Destek" /></div>
-                        Canlı Destek <small>(Herhangi bir sorun varsa hemen iletişime geç)</small>
+                        <div class="menu-text">Canlı Destek <small>(Herhangi bir sorun varsa hemen iletişime geç)</small></div>
                     </li>
                     <li>
                         <div class="transaction-icon"><img src="logout.svg" alt="Çıkış Yap" /></div>
-                        <a href="index.html" onclick="logout()">Çıkış Yap</a> <small>(Güvenli çıkış yap)</small>
+                        <div class="menu-text"><a href="index.html" onclick="logout()">Çıkış Yap</a> <small>(Güvenli çıkış yap)</small></div>
                     </li>
                 </ul>
             </div>
