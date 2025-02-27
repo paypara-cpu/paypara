@@ -761,11 +761,16 @@
                     });
 
                     input.addEventListener('focus', function() {
-                        if (this.value === '') this.value = 'TR';
-                        else if (this.value === 'TR') this.value = 'TR';
+                        if (this.value === this.placeholder) {
+                            this.value = '';
+                            this.classList.remove('placeholder');
+                        }
                     });
                     input.addEventListener('blur', function() {
-                        if (!this.value || this.value === 'TR') this.value = 'TR';
+                        if (!this.value) {
+                            this.value = '';
+                            this.classList.add('placeholder');
+                        }
                     });
 
                     input.addEventListener('paste', function(e) {
